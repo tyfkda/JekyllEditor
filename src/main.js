@@ -51,7 +51,7 @@ const EditPageComponent = {
       <div style="position: absolute; width: 50%; height: 100%; left: 0; top: 0;">
         <div style="position: absolute; left: 4px; top: 4px; right: 4px; bottom: 4px;">
           <div style="position: absolute; width: 100%; height: 100%;">
-            <textarea style="width: 100%; height: 100%; padding: 4px; outline: none; border: 1px solid gray; border-radius: 6px; resize: none;">{{$ctrl.contents}}</textarea>
+            <textarea style="width: 100%; height: 100%; padding: 4px; border: 1px solid gray; border-radius: 6px; resize: none;">{{$ctrl.contents}}</textarea>
           </div>
         </div>
       </div>
