@@ -1,8 +1,3 @@
-class AppController {
-  constructor() {
-  }
-}
-
 const TopPageComponent = {
   controller: ['$http', function($http) {
     $http({method: 'GET', url: '/api'})
@@ -54,7 +49,6 @@ angular.module(APP, ['ngRoute'])
         redirectTo: '/',
       })
   }])
-  .controller('AppController', [AppController])
   .component('topPage', TopPageComponent)
   .component('editPage', EditPageComponent)
 
