@@ -10,7 +10,6 @@ require ',config'
 
 def glob(path, pattern)
   Dir.glob("#{path}/#{pattern}").map do |file|
-    p file
     file.sub(%r!^#{path}/!, '')
   end
 end
