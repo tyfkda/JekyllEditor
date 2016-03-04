@@ -8,6 +8,13 @@ require 'sinatra/reloader'
 
 require ',config'
 
+def glob(path, pattern)
+  Dir.glob("#{path}/#{pattern}").map do |file|
+    p file
+    file.sub(%r!^#{path}/!, '')
+  end
+end
+
 set :public_folder, 'public'
 
 get '/' do
@@ -15,8 +22,8 @@ get '/' do
 end
 
 get '/api' do
-  posts = Dir.glob("#{CONFIG[:jekyll_base_path]}/_posts/*.md")
-  drafts = Dir.glob("#{CONFIG[:jekyll_base_path]}/_drafts/*.md")
+  posts = glob("#{CONFIG[:jekyll_base_path]}/_posts", '*.md')
+  drafts = glob("#{CONFIG[:jekyll_base_path]}/_drafts", '/*.md')
   JSON.dump({
       ok: true,
       posts: posts,

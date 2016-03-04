@@ -1,23 +1,41 @@
 class AppController {
   constructor() {
-    console.log('AppController')
   }
 }
 
 const TopPageComponent = {
-  controller: function() {
-  },
+  controller: ['$http', function($http) {
+    $http({method: 'GET', url: '/api'})
+      .then(response => {
+        this.posts = response.data.posts.map(post => {
+          return {
+            url: `#/edit/${post}`,
+            text: post,
+          }
+        })
+      }, response => {
+        console.error(response)
+      })
+  }],
   template: `
     <div>Top!</div>
+    <ul>
+      <li ng-repeat="post in $ctrl.posts">
+        <a ng-href="{{post.url}}">{{post.text}}</a>
+      </li>
+    </ul>
     <a href="#/edit">edit</a>
   `,
 }
 
 const EditPageComponent = {
-  controller: function() {
-  },
+  controller: ['$routeParams', function($routeParams) {
+    this.file = $routeParams.file
+  }],
   template: `
-    <div>Edit!</div>
+    <div>
+      {{$ctrl.file}}
+    </div>
     <a href="#/">back</a>
   `,
 }
@@ -29,7 +47,7 @@ angular.module(APP, ['ngRoute'])
       .when('/', {
         template: '<top-page></top-page>',
       })
-      .when('/edit', {
+      .when('/edit/:file', {
         template: '<edit-page></edit-page>',
       })
       .otherwise({
