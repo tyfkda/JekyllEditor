@@ -26,6 +26,7 @@ import karma from 'gulp-karma'
 
 import plumber from 'gulp-plumber'
 import del from 'del'
+import shell from 'shelljs'
 
 const destDir = './public'
 const assetsDir = `${destDir}/assets`
@@ -128,11 +129,19 @@ gulp.task('sass', () => {
     .pipe(browserSync.reload({stream: true}))
 })
 
+const devServer = (_port) => {
+  shell.exec(`bundle exec ruby tools/server.rb`,
+             {async: true},
+             () => {
+               console.log('SERVER DONE')
+             })
+}
+
 gulp.task('server', () => {
+  const port = 4567
+  devServer(port)
   browserSync.init({
-    server: {
-      baseDir: destDir,
-    },
+    proxy: `localhost:${port}`,
   })
 })
 
