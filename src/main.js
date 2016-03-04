@@ -29,23 +29,29 @@ const EditPageComponent = {
   controller: ['$routeParams', '$http', '$sce', '$timeout', function($routeParams, $http, $sce, $timeout) {
     this.file = $routeParams.file
 
+    this.setPreviewHtml = (previewHtml) => {
+      this.preview = $sce.trustAsHtml(previewHtml)
+
+      $timeout(() => {
+        MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+      })
+    }
+
     $http({method: 'GET', url: `/api?action=post&file=${this.file}`})
       .then(response => {
-        const html = response.data.html
         this.contents = response.data.contents
-        this.preview = $sce.trustAsHtml(html)
-
-        $timeout(() => {
-          MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
-        })
+        this.setPreviewHtml(response.data.html)
       }, response => {
         console.error(response)
       })
 
     this.save = () => {
-      $http({method: 'POST', url: `/api?action=post&file=${this.file}`})
+      $http({method: 'PUT', url: `/api?action=post&file=${this.file}`,
+             data: {
+               contents: this.contents,
+             }})
         .then(response => {
-          console.log(response)
+          this.setPreviewHtml(response.data.html)
         }, response => {
           console.error(response)
         })
@@ -65,7 +71,8 @@ const EditPageComponent = {
       <div style="position: absolute; width: 50%; height: 100%; left: 0; top: 0;">
         <div style="position: absolute; left: 4px; top: 4px; right: 0; bottom: 4px;">
           <div style="position: absolute; width: 100%; height: 100%;">
-            <textarea style="width: 100%; height: 100%; padding: 4px; border: 1px solid gray; border-radius: 6px 0 0 6px; resize: none;">{{$ctrl.contents}}</textarea>
+            <textarea style="width: 100%; height: 100%; padding: 4px; border: 1px solid gray; border-radius: 6px 0 0 6px; resize: none;"
+                      ng-model="$ctrl.contents"></textarea>
           </div>
         </div>
       </div>

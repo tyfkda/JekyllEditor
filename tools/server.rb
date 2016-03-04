@@ -50,3 +50,26 @@ get '/api' do
     status 400
   end
 end
+
+put '/api' do
+  body = JSON.parse(request.body.read)
+  case params[:action]
+  when 'post'
+    file = params[:file]
+    contents = body['contents']
+    begin
+      open("#{POSTS_PATH}/#{file}", 'w') do |f|
+        f.write(contents)
+      end
+      JSON.dump({
+          ok: true,
+          html: Kramdown::Document.new(contents).to_html,
+        })
+    rescue => ex
+      status 500
+      ex
+    end
+  else
+    status 500
+  end
+end
