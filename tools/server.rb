@@ -3,6 +3,7 @@
 $LOAD_PATH.push(File.dirname(__FILE__))
 
 require 'json'
+require 'kramdown'
 require 'sinatra'
 require 'sinatra/reloader'
 
@@ -38,9 +39,11 @@ get '/api' do
   when 'post'
     file = params[:file]
     path = "#{POSTS_PATH}/#{file}"
+    contents = File.read(path)
     JSON.dump({
         ok: true,
-        contents: File.read(path)
+        contents: contents,
+        html: Kramdown::Document.new(contents).to_html,
       })
   else
     $stderr.puts "Invalid action: #{action}"

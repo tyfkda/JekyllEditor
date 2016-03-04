@@ -26,11 +26,17 @@ const TopPageComponent = {
 }
 
 const EditPageComponent = {
-  controller: ['$routeParams', '$http', function($routeParams, $http) {
+  controller: ['$routeParams', '$http', '$sce', '$timeout', function($routeParams, $http, $sce, $timeout) {
     this.file = $routeParams.file
+
     $http({method: 'GET', url: `/api?action=post&file=${this.file}`})
       .then(response => {
-        this.contents = response.data.contents
+        const html = response.data.html
+        this.preview = $sce.trustAsHtml(html)
+
+        $timeout(() => {
+          MathJax.Hub.Queue(['Typeset', MathJax.Hub]);
+        })
       }, response => {
         console.error(response)
       })
@@ -38,7 +44,7 @@ const EditPageComponent = {
   template: `
     <a href="#/">back</a>
     <h1>{{$ctrl.file}}</h1>
-    <pre style="border:solid 1px gray; padding:4px;">{{$ctrl.contents}}</pre>
+    <div style="border:solid 1px gray; padding:4px;" ng-bind-html="$ctrl.preview"></div>
     <a href="#/">back</a>
   `,
 }

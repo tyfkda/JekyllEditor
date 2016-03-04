@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     backports (3.6.8)
+    kramdown (1.5.0)
     multi_json (1.11.2)
     rack (1.6.4)
     rack-protection (1.5.3)
@@ -25,6 +26,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  kramdown
   sinatra
   sinatra-contrib
 
