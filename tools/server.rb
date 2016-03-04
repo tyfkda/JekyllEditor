@@ -21,11 +21,19 @@ get '/' do
 end
 
 get '/api' do
-  posts = glob("#{CONFIG[:jekyll_base_path]}/_posts", '*.md')
-  drafts = glob("#{CONFIG[:jekyll_base_path]}/_drafts", '/*.md')
-  JSON.dump({
-      ok: true,
-      posts: posts,
-      drafts: drafts,
-    })
+  action = params[:action]
+
+  case action
+  when 'list'
+    posts = glob("#{CONFIG[:jekyll_base_path]}/_posts", '*.md')
+    drafts = glob("#{CONFIG[:jekyll_base_path]}/_drafts", '/*.md')
+    JSON.dump({
+        ok: true,
+        posts: posts,
+        drafts: drafts,
+      })
+  else
+    $stderr.puts "Invalid action: #{action}"
+    status 400
+  end
 end

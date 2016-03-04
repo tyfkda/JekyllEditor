@@ -1,6 +1,6 @@
 const TopPageComponent = {
   controller: ['$http', function($http) {
-    $http({method: 'GET', url: '/api'})
+    $http({method: 'GET', url: '/api?action=list'})
       .then(response => {
         this.posts = response.data.posts.map(post => {
           return {
