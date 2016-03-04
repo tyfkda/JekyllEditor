@@ -41,11 +41,25 @@ const EditPageComponent = {
       }, response => {
         console.error(response)
       })
+
+    this.save = () => {
+      $http({method: 'POST', url: `/api?action=post&file=${this.file}`})
+        .then(response => {
+          console.log(response)
+        }, response => {
+          console.error(response)
+        })
+    }
   }],
   template: `
-    <div style="height:52px;">
-      <a href="#/">back</a>
-      <h1>{{$ctrl.file}}</h1>
+    <div style="position: relative; height:52px; overflow: hidden;">
+      <div style="position: absolute; left: 0; top: 0; right: 100px; bottom: 0;">
+        <a href="#/">back</a>
+        <input type="text" value="{{$ctrl.file}}" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
+      </div>
+      <div style="position: absolute; top: 0; right: 0px; width: 100px; height: 100%;">
+        <button class="save-btn" ng-click="$ctrl.save()">Save</button>
+      </div>
     </div>
     <div style="position: absolute; left: 0; top: 52px; right: 0; bottom: 0;">
       <div style="position: absolute; width: 50%; height: 100%; left: 0; top: 0;">

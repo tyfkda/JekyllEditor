@@ -22,3 +22,19 @@ textarea {
   font-size: 14px;
   line-height: 1.2;
 }
+
+.save-btn {
+  font-size: 1.5em;
+  margin: 4px;
+  padding: 4px 8px;
+  background-color: #4f4;
+  border: 1px solid #8f8;
+  border-radius: 6px;
+
+  &:hover {
+    background-color: #8f8;
+  }
+  &:active {
+    background-color: #1c1;
+  }
+}
