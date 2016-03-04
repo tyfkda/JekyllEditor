@@ -8,6 +8,9 @@ require 'sinatra/reloader'
 
 require ',config'
 
+POSTS_PATH = "#{CONFIG[:jekyll_base_path]}/_posts"
+DRAFTS_PATH = "#{CONFIG[:jekyll_base_path]}/_drafts"
+
 def glob(path, pattern)
   Dir.glob("#{path}/#{pattern}").map do |file|
     file.sub(%r!^#{path}/!, '')
@@ -25,12 +28,19 @@ get '/api' do
 
   case action
   when 'list'
-    posts = glob("#{CONFIG[:jekyll_base_path]}/_posts", '*.md')
-    drafts = glob("#{CONFIG[:jekyll_base_path]}/_drafts", '/*.md')
+    posts = glob(POSTS_PATH, '*.md')
+    drafts = glob(DRAFTS_PATH, '/*.md')
     JSON.dump({
         ok: true,
         posts: posts,
         drafts: drafts,
+      })
+  when 'post'
+    file = params[:file]
+    path = "#{POSTS_PATH}/#{file}"
+    JSON.dump({
+        ok: true,
+        contents: File.read(path)
       })
   else
     $stderr.puts "Invalid action: #{action}"
