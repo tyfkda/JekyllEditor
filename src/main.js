@@ -1,3 +1,13 @@
-import Util from './util/util'
+class AppController {
+  constructor() {
+    console.log('AppController')
+  }
+}
 
-Util.log('Hello, ES6')
+const APP = 'app'
+angular.module(APP, [])
+  .controller('AppController', [AppController])
+
+angular.element(document).ready(() => {
+  angular.bootstrap(document, [APP])
+})
