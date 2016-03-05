@@ -24,7 +24,7 @@ get '/' do
   redirect './index.html'
 end
 
-get '/api' do
+get '/api.rb' do
   action = params[:action]
 
   case action

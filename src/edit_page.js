@@ -1,5 +1,7 @@
 import kModuleName from './app_module_def'
 
+import Const from './const'
+
 class EditPageController {
   constructor($routeParams, $http, $sce, $timeout) {
     this._$http = $http
@@ -12,7 +14,7 @@ class EditPageController {
   }
 
   requestContents() {
-    this._$http({method: 'GET', url: `/api?action=post&file=${this.file}`})
+    this._$http({method: 'GET', url: `${Const.API}?action=post&file=${this.file}`})
       .then(response => {
         this.contents = response.data.contents
         this.setPreviewHtml(response.data.html)
@@ -30,7 +32,7 @@ class EditPageController {
   }
 
   save() {
-    this._$http({method: 'PUT', url: `/api?action=post&file=${this.file}`,
+    this._$http({method: 'PUT', url: `${Const.API}?action=post&file=${this.file}`,
            data: {
              contents: this.contents,
            }})

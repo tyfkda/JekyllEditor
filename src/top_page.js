@@ -1,8 +1,10 @@
 import kModuleName from './app_module_def'
 
+import Const from './const'
+
 class TopPageController {
   constructor($http) {
-    $http({method: 'GET', url: '/api?action=list'})
+    $http({method: 'GET', url: `${Const.API}?action=list`})
       .then(response => {
         this.posts = response.data.posts.map(post => {
           return {
