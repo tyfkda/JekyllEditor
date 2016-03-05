@@ -130,7 +130,7 @@ gulp.task('sass', () => {
 })
 
 const devServer = (_port) => {
-  shell.exec(`bundle exec ruby tools/server.rb`,
+  shell.exec(`bundle exec ruby server/dev_server.rb`,
              {async: true},
              () => {
                console.log('SERVER DONE')
