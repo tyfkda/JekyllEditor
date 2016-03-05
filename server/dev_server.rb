@@ -2,74 +2,51 @@
 
 $LOAD_PATH.push(File.dirname(__FILE__))
 
-require 'json'
-require 'kramdown'
 require 'sinatra'
 require 'sinatra/reloader'
 
-require ',config'
-
-POSTS_PATH = "#{CONFIG[:jekyll_base_path]}/_posts"
-DRAFTS_PATH = "#{CONFIG[:jekyll_base_path]}/_drafts"
-
-def glob(path, pattern)
-  Dir.glob("#{path}/#{pattern}").map do |file|
-    file.sub(%r!^#{path}/!, '')
-  end
-end
+require 'jekyll_editor'
 
 set :public_folder, 'public'
 
-get '/' do
-  redirect './index.html'
-end
+def main
+  je = JekyllEditor.new
 
-get '/api.rb' do
-  action = params[:action]
-
-  case action
-  when 'list'
-    posts = glob(POSTS_PATH, '*.md')
-    drafts = glob(DRAFTS_PATH, '/*.md')
-    JSON.dump({
-        ok: true,
-        posts: posts,
-        drafts: drafts,
-      })
-  when 'post'
-    file = params[:file]
-    path = "#{POSTS_PATH}/#{file}"
-    contents = File.read(path)
-    JSON.dump({
-        ok: true,
-        contents: contents,
-        html: Kramdown::Document.new(contents).to_html,
-      })
-  else
-    $stderr.puts "Invalid action: #{action}"
-    status 400
+  get '/' do
+    redirect './index.html'
   end
-end
 
-put '/api' do
-  body = JSON.parse(request.body.read)
-  case params[:action]
-  when 'post'
-    file = params[:file]
-    contents = body['contents']
-    begin
-      open("#{POSTS_PATH}/#{file}", 'w') do |f|
-        f.write(contents)
-      end
-      JSON.dump({
-          ok: true,
-          html: Kramdown::Document.new(contents).to_html,
-        })
-    rescue => ex
-      status 500
-      ex
+  get '/api.rb' do
+    action = params[:action]
+
+    case action
+    when 'list'
+      je.get_list
+    when 'post'
+      file = params[:file]
+      je.get_post(file)
+    else
+      $stderr.puts "Invalid action: #{action}"
+      status 400
     end
-  else
-    status 500
+  end
+
+  put '/api.rb' do
+    case params[:action]
+    when 'post'
+      file = params[:file]
+      contents = request.body.set_encoding('UTF-8').read
+      begin
+        result = je.put_post(file, contents)
+        return result
+      rescue => ex
+        status 501
+        ex.inspect
+      end
+    else
+      status 500
+    end
   end
 end
+
+main
