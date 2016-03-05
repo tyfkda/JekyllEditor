@@ -33,9 +33,8 @@ class EditPageController {
 
   save() {
     this._$http({method: 'PUT', url: `${Const.API}?action=post&file=${this.file}`,
-           data: {
-             contents: this.contents,
-           }})
+                 data: this.contents
+                })
       .then(response => {
         this.setPreviewHtml(response.data.html)
       }, response => {
