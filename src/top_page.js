@@ -22,6 +22,10 @@ class TopPageController {
         console.error(response)
       })
   }
+
+  createNewPost() {
+
+  }
 }
 angular.module(kModuleName)
   .component('topPage', {
@@ -30,6 +34,7 @@ angular.module(kModuleName)
       <h1>Posts</h1>
       <div>
         <button ng-click="$ctrl.refresh()">Refresh</button>
+        <button ng-click="$ctrl.createNewPost()">New Post</button>
       </div>
       <div ng-show="$ctrl.posts==null">
         Loading...

@@ -1,5 +1,6 @@
 import kModuleName from './app_module_def'
 
+import './edit_component'
 import './edit_page'
 import './top_page'
 
