@@ -4,6 +4,7 @@
 
 require 'json'
 require 'kramdown'
+require 'yaml'
 
 require ',config'
 
@@ -14,6 +15,38 @@ def glob(path, pattern)
   Dir.glob("#{path}/#{pattern}").map do |file|
     file.sub(%r!^#{path}/!, '')
   end
+end
+
+def read_jekyll_front_matter(fn)
+  open(fn) do |f|
+    line = f.gets
+    unless line =~ /^-{2,}$/
+      return {}
+    end
+
+    lines = []
+    while true
+      line = f.gets
+      if !line || line =~ /^-{2,}$/
+        break
+      end
+      lines.push(line)
+    end
+    return YAML.load(lines.join)
+  end
+end
+
+def read_front_matters(posts, path)
+  posts.map do |fn|
+    h = read_jekyll_front_matter("#{path}/#{fn}")
+    h['file'] = fn
+    unless h.has_key?('date')
+      if fn =~ /^((\d+)-(\d+)-(\d+))/
+        h['date'] = Time.new($2.to_i, $3.to_i, $4.to_i)
+      end
+    end
+    h
+  end.sort_by! {|post| post['date']}.reverse!
 end
 
 ####
@@ -52,8 +85,8 @@ class JekyllEditor
   end
 
   def get_list(req, res)
-    posts = glob(POSTS_PATH, '*.md')
-    drafts = glob(DRAFTS_PATH, '/*.md')
+    posts = read_front_matters(glob(POSTS_PATH, '*.md'), POSTS_PATH)
+    drafts = read_front_matters(glob(DRAFTS_PATH, '/*.md'), DRAFTS_PATH)
     res.headers = {
       'Status' => '200 OK',
       'Content-Type' => 'text/json',

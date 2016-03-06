@@ -12,15 +12,14 @@ class TopPageController {
   refresh() {
     this._$http({method: 'GET', url: `${Const.API}?action=list`})
       .then(response => {
-        this.posts = response.data.posts.map(post => {
-          return {
-            url: `#/edit/${post}`,
-            text: post,
-          }
-        })
+        this.posts = response.data.posts
       }, response => {
         console.error(response)
       })
+  }
+
+  getPostUrl(post) {
+    return `#/edit/${post.file}`
   }
 
   createNewPost() {
@@ -44,7 +43,7 @@ angular.module(kModuleName)
       </div>
       <ul ng-show="$ctrl.posts&&$ctrl.posts.length!=0">
         <li ng-repeat="post in $ctrl.posts">
-          <a ng-href="{{post.url}}">{{post.text}}</a>
+          {{post.date}} <a ng-href="{{$ctrl.getPostUrl(post)}}">{{post.title}}</a>
         </li>
       </ul>
     `,
