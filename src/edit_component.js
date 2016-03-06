@@ -10,6 +10,8 @@ class EditComponentController {
     this._$timeout = $timeout
 
     this.fileName = this.originalFileName
+    this.info = {
+    }
     if (this.originalFileName) {
       this.requestContents()
     }
@@ -38,17 +40,20 @@ class EditComponentController {
   }
 
   save() {
-    if (!this.originalFileName) {
-      // Create new
-      this.originalFileName = this.fileName
+    if (this.originalFileName == null) {  // New file.
+      const t = new Date()
+      this.info.date = `${t.getFullYear()}-${t.getMonth()+1}-${t.getDate()} ${t.getHours()}:${t.getMinutes()}:${t.getSeconds()}`
     }
-    this._$http({method: 'PUT', url: `${Const.API}?action=post&file=${this.originalFileName}`,
+
+    const url = `${Const.API}?action=post${this.originalFileName?'&file='+this.originalFileName:''}`
+    this._$http({method: 'PUT', url,
                  data: {
                    info: this.info,
                    contents: this.contents,
                  },
                 })
       .then(response => {
+        this.originalFileName = response.data.file
         this.setPreviewHtml(response.data.html)
       }, response => {
         console.error(response)

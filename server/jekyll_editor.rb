@@ -141,8 +141,14 @@ class JekyllEditor
     json = JSON.parse(req.body)
     front_matters = json['info']
     front_matters['date'] = Time.parse(front_matters['date'])
+
+    file = req.params['file']
+    unless file  # New file
+      file = "#{front_matters['date'].strftime('%Y-%m-%d')}-#{Time.now.to_i.to_s}.md"
+    end
+
     contents = json['contents']
-    open("#{POSTS_PATH}/#{req.params['file']}", 'w') do |f|
+    open("#{POSTS_PATH}/#{file}", 'w', 0777) do |f|
       f.write(%!\
 #{front_matters.to_yaml}\
 ---
@@ -155,6 +161,7 @@ class JekyllEditor
     }
     res.out(JSON.dump({
           ok: true,
+          file: file,
           html: Kramdown::Document.new(contents).to_html,
         }))
   end
