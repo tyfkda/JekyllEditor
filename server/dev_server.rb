@@ -19,22 +19,33 @@ class SinatraDevServer < Sinatra::Base
   end
 
   get '/api.rb' do
-    req = MyRequest.new(:get, params)
-    res = MyResponse.new
-    JekyllEditor.new.get(req, res)
-
-    headers(res.headers)
-    res.to_s
+    run_jekyll_editor(:get)
   end
 
   put '/api.rb' do
-    body = request.body.set_encoding('UTF-8').read
-    req = MyRequest.new(:put, params, body)
-    res = MyResponse.new
-    JekyllEditor.new.put(req, res)
+    run_jekyll_editor(:put)
+  end
 
-    headers(res.headers)
-    res.to_s
+  delete '/api.rb' do
+    run_jekyll_editor(:delete)
+  end
+
+  def run_jekyll_editor(method)
+    body = request.body.set_encoding('UTF-8').read
+    req = MyRequest.new(method, params, body)
+    res = MyResponse.new
+    je = JekyllEditor.new
+    if je.respond_to?(req.method)
+      je.send(req.method, req, res)
+      headers(res.headers)
+      res.to_s
+    else
+      status(400)
+      JSON.dump({
+          params: req.params,
+          body: req.body,
+        })
+    end
   end
 end
 

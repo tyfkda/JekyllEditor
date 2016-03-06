@@ -41,6 +41,16 @@ class JekyllEditor
     end
   end
 
+  def delete(req, res)
+    case req.params['action']
+    when 'post'
+      delete_post(req, res)
+    else
+      res.status(400)
+      res.out('Bad action')
+    end
+  end
+
   def get_list(req, res)
     posts = glob(POSTS_PATH, '*.md')
     drafts = glob(DRAFTS_PATH, '/*.md')
@@ -80,6 +90,17 @@ class JekyllEditor
     res.out(JSON.dump({
           ok: true,
           html: Kramdown::Document.new(req.body).to_html,
+        }))
+  end
+
+  def delete_post(req, res)
+    File.delete("#{POSTS_PATH}/#{req.params['file']}")
+    res.headers = {
+      'Status' => '200 OK',
+      'Content-Type' => 'text/json',
+    }
+    res.out(JSON.dump({
+          ok: true,
         }))
   end
 end

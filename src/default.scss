@@ -23,6 +23,18 @@ textarea {
   line-height: 1.2;
 }
 
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}
+
+.clear-fix {
+  clear: both;
+}
+
 .save-btn {
   font-size: 1.5em;
   margin: 4px;
@@ -36,5 +48,24 @@ textarea {
   }
   &:active {
     background-color: #1c1;
+  }
+}
+
+.delete-btn {
+  font-size: 1.5em;
+  margin: 4px;
+  padding: 4px 8px;
+  background-color: #f44;
+  border: 1px solid #f88;
+  border-radius: 6px;
+
+  &:hover {
+    background-color: #f88;
+  }
+  &:active {
+    background-color: #800;
+  }
+  &:disabled {
+    background-color: lightgray;
   }
 }

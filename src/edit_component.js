@@ -3,8 +3,9 @@ import kModuleName from './app_module_def'
 import Const from './const'
 
 class EditComponentController {
-  constructor($http, $sce, $timeout) {
+  constructor($http, $location, $sce, $timeout) {
     this._$http = $http
+    this._$location = $location
     this._$sce = $sce
     this._$timeout = $timeout
 
@@ -34,7 +35,7 @@ class EditComponentController {
 
   save() {
     if (!this.originalFileName) {
-      // 新規作成時
+      // Create new
       this.originalFileName = this.fileName
     }
     this._$http({method: 'PUT', url: `${Const.API}?action=post&file=${this.originalFileName}`,
@@ -46,10 +47,23 @@ class EditComponentController {
         console.error(response)
       })
   }
+
+  delete() {
+    const result = confirm('Delete this post?')
+    if (!result)
+      return
+    this._$http({method: 'DELETE', url: `${Const.API}?action=post&file=${this.originalFileName}`})
+      .then(response => {
+        console.log(response)
+        this._$location.path('/')
+      }, response => {
+        console.error(response)
+      })
+  }
 }
 angular.module(kModuleName)
   .component('editComponent', {
-    controller: ['$http', '$sce', '$timeout', EditComponentController],
+    controller: ['$http', '$location', '$sce', '$timeout', EditComponentController],
     bindings: {
       originalFileName: '@',
     },
@@ -59,8 +73,10 @@ angular.module(kModuleName)
           <a href="#/">back</a>
           <input type="text" ng-model="$ctrl.fileName" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
         </div>
-        <div style="position: absolute; top: 0; right: 0px; width: 100px; height: 100%;">
-          <button class="save-btn" ng-click="$ctrl.save()">Save</button>
+        <div style="position: absolute; top: 0; right: 0px; width: 200px; height: 100%;">
+          <button class="delete-btn pull-right" ng-click="$ctrl.delete()" ng-disabled="!$ctrl.originalFileName">Delete</button>
+          <button class="save-btn pull-right" ng-click="$ctrl.save()">Save</button>
+          <div class="clear-fix"></div>
         </div>
       </div>
       <div style="position: absolute; left: 0; top: 52px; right: 0; bottom: 0;">
