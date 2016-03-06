@@ -2,51 +2,42 @@
 
 $LOAD_PATH.push(File.dirname(__FILE__))
 
-require 'sinatra'
+require 'sinatra/base'
 require 'sinatra/reloader'
 
 require 'jekyll_editor'
 
-set :public_folder, 'public'
+class SinatraDevServer < Sinatra::Base
+  configure do
+    register Sinatra::Reloader
+  end
 
-def main
-  je = JekyllEditor.new
+  set :public_folder, 'public'
 
   get '/' do
     redirect './index.html'
   end
 
   get '/api.rb' do
-    action = params[:action]
+    req = MyRequest.new(:get, params)
+    res = MyResponse.new
+    JekyllEditor.new.get(req, res)
 
-    case action
-    when 'list'
-      je.get_list
-    when 'post'
-      file = params[:file]
-      je.get_post(file)
-    else
-      $stderr.puts "Invalid action: #{action}"
-      status 400
-    end
+    headers(res.headers)
+    res.to_s
   end
 
   put '/api.rb' do
-    case params[:action]
-    when 'post'
-      file = params[:file]
-      contents = request.body.set_encoding('UTF-8').read
-      begin
-        result = je.put_post(file, contents)
-        return result
-      rescue => ex
-        status 501
-        ex.inspect
-      end
-    else
-      status 500
-    end
+    body = request.body.set_encoding('UTF-8').read
+    req = MyRequest.new(:put, params, body)
+    res = MyResponse.new
+    JekyllEditor.new.put(req, res)
+
+    headers(res.headers)
+    res.to_s
   end
 end
 
-main
+if $0 == __FILE__
+  SinatraDevServer.run!
+end

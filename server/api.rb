@@ -14,7 +14,7 @@ class MyCgi
   attr_reader :method, :params, :body
 
   def initialize
-    @method = (ENV['REQUEST_METHOD'] || 'GET').upcase
+    @method = (ENV['REQUEST_METHOD'] || 'GET').downcase.intern
     @params = get_params_from_query_string
     @body = read_body($stdin)
     @headers = {}
@@ -63,53 +63,40 @@ EOD
 end
 
 def main
-  je = JekyllEditor.new
-  ex = nil
-
-  cgi = MyCgi.new
-  case cgi.method
-  when 'GET'
-    case cgi.params['action']
-    when 'list'
-      cgi.set_headers({
+  def run_jekyll_editor(req, res)
+    je = JekyllEditor.new
+    if je.respond_to?(req.method)
+      je.send(req.method, req, res)
+    else
+      res.headers({
           'Content-Type' => 'text/json',
+          'Status' => 400,
         })
-      return cgi.out { je.get_list }
-    when 'post'
-      file = cgi.params['file']
-      contents = File.read("#{POSTS_PATH}/#{file}")
-      cgi.set_headers({
-          'Content-Type' => 'text/json',
-          'Status' => 200,
-        })
-      return cgi.out { je.get_post(file) }
-    end
-
-  when 'PUT'
-    case cgi.params['action']
-    when 'post'
-      file = cgi.params['file']
-      contents = cgi.body
-      result = je.put_post(file, contents)
-      cgi.set_headers({
-          'Content-Type' => 'text/json',
-          'Status' => 200,
-        })
-      return cgi.out { result }
+      res.out(JSON.dump({
+            params: cgi.params,
+            body: cgi.body,
+            ex: ex ? ex.inspect : '',
+          }))
     end
   end
 
-  cgi.set_headers({
+  cgi = MyCgi.new
+  req = MyRequest.new(cgi.method, cgi.params, cgi.body)
+  res = MyResponse.new
+  begin
+    run_jekyll_editor(req, res)
+    cgi.set_headers(res.headers)
+    return cgi.out { res.to_s }
+  rescue => ex
+    cgi.set_headers({
+      'Status' => '500 Exception occurred',
       'Content-Type' => 'text/json',
-      'Status' => 404,
     })
-  return cgi.out { JSON.dump({
-        method: 'PUT',
-        params: cgi.params,
-        body: cgi.body,
-        ex: ex ? ex.inspect : '',
-      })
-  }
+    cgi.out(JSON.dump({
+          ok: false,
+          ex: ex.inspect,
+        }))
+  end
 end
 
 main
