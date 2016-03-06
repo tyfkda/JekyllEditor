@@ -4,6 +4,7 @@
 
 require 'json'
 require 'kramdown'
+require 'time'
 require 'yaml'
 
 require ',config'
@@ -17,7 +18,7 @@ def glob(path, pattern)
   end
 end
 
-def read_jekyll_front_matter(fn)
+def read_jekyll_front_matter(fn, read_contents = false)
   open(fn) do |f|
     line = f.gets
     unless line =~ /^-{2,}$/
@@ -32,7 +33,23 @@ def read_jekyll_front_matter(fn)
       end
       lines.push(line)
     end
-    return YAML.load(lines.join)
+
+    h = YAML.load(lines.join)
+    unless h.has_key?('date')
+      if File.basename(fn) =~ /^((\d+)-(\d+)-(\d+))/
+        h['date'] = Time.new($2.to_i, $3.to_i, $4.to_i)
+      end
+    end
+    unless read_contents
+      return h
+    end
+
+    lines = f.read().split("\n")
+    if !lines.empty? && lines[0] == ''
+      lines.shift  # Drop first empty line.
+    end
+
+    return h, lines.join("\n")
   end
 end
 
@@ -40,11 +57,6 @@ def read_front_matters(posts, path)
   posts.map do |fn|
     h = read_jekyll_front_matter("#{path}/#{fn}")
     h['file'] = fn
-    unless h.has_key?('date')
-      if fn =~ /^((\d+)-(\d+)-(\d+))/
-        h['date'] = Time.new($2.to_i, $3.to_i, $4.to_i)
-      end
-    end
     h
   end.sort_by! {|post| post['date']}.reverse!
 end
@@ -112,21 +124,30 @@ class JekyllEditor
       return
     end
 
-    contents = File.read(path)
+    info, contents = read_jekyll_front_matter("#{POSTS_PATH}/#{req.params['file']}", true)
     res.headers = {
       'Status' => '200 OK',
       'Content-Type' => 'text/json',
     }
     res.out(JSON.dump({
           ok: true,
+          info: info,
           contents: contents,
           html: Kramdown::Document.new(contents).to_html,
         }))
   end
 
   def put_post(req, res)
+    json = JSON.parse(req.body)
+    front_matters = json['info']
+    front_matters['date'] = Time.parse(front_matters['date'])
+    contents = json['contents']
     open("#{POSTS_PATH}/#{req.params['file']}", 'w') do |f|
-      f.write(req.body)
+      f.write(%!\
+#{front_matters.to_yaml}\
+---
+
+#{contents.chomp}!)
     end
     res.headers = {
       'Status' => '200 OK',
@@ -134,7 +155,7 @@ class JekyllEditor
     }
     res.out(JSON.dump({
           ok: true,
-          html: Kramdown::Document.new(req.body).to_html,
+          html: Kramdown::Document.new(contents).to_html,
         }))
   end
 

@@ -5,7 +5,7 @@ $LOAD_PATH.push(File.dirname(__FILE__))
 require 'sinatra/base'
 require 'sinatra/reloader'
 
-require 'jekyll_editor'
+load 'jekyll_editor.rb'
 
 class SinatraDevServer < Sinatra::Base
   configure do

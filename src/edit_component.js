@@ -18,6 +18,7 @@ class EditComponentController {
   requestContents() {
     this._$http({method: 'GET', url: `${Const.API}?action=post&file=${this.originalFileName}`})
       .then(response => {
+        this.info = response.data.info
         this.contents = response.data.contents
         this.setPreviewHtml(response.data.html)
       }, response => {
@@ -42,7 +43,10 @@ class EditComponentController {
       this.originalFileName = this.fileName
     }
     this._$http({method: 'PUT', url: `${Const.API}?action=post&file=${this.originalFileName}`,
-                 data: this.contents
+                 data: {
+                   info: this.info,
+                   contents: this.contents,
+                 },
                 })
       .then(response => {
         this.setPreviewHtml(response.data.html)
@@ -74,7 +78,7 @@ angular.module(kModuleName)
       <div style="position: relative; height:52px; overflow: hidden;">
         <div style="position: absolute; left: 0; top: 0; right: 100px; bottom: 0;">
           <a href="#/">back</a>
-          <input type="text" ng-model="$ctrl.fileName" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
+          <input type="text" ng-model="$ctrl.info.title" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
         </div>
         <div style="position: absolute; top: 0; right: 0px; width: 200px; height: 100%;">
           <button class="delete-btn pull-right" ng-click="$ctrl.delete()" ng-disabled="!$ctrl.originalFileName">Delete</button>
