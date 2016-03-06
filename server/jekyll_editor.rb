@@ -67,6 +67,18 @@ class JekyllEditor
 
   def get_post(req, res)
     path = "#{POSTS_PATH}/#{req.params['file']}"
+    unless File.exists?(path)
+      res.headers = {
+        'Status' => '404 Not Found',
+        'Content-Type' => 'text/json',
+      }
+      res.out(JSON.dump({
+            ok: false,
+            file: req.params['file'],
+          }))
+      return
+    end
+
     contents = File.read(path)
     res.headers = {
       'Status' => '200 OK',

@@ -22,6 +22,9 @@ class EditComponentController {
         this.setPreviewHtml(response.data.html)
       }, response => {
         console.error(response)
+        if (response.status == 404) {  // Not Found
+          this._$location.path('/')
+        }
       })
   }
 

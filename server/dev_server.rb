@@ -38,6 +38,9 @@ class SinatraDevServer < Sinatra::Base
     if je.respond_to?(req.method)
       je.send(req.method, req, res)
       headers(res.headers)
+      if res.headers.has_key?('Status')
+        status(res.headers['Status'])
+      end
       res.to_s
     else
       status(400)
