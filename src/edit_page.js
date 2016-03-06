@@ -9,6 +9,6 @@ angular.module(kModuleName)
   .component('editPage', {
     controller: ['$routeParams', EditPageController],
     template: `
-      <edit-component file="{{$ctrl.file}}"></edit-component>
+      <edit-component original-file-name="{{$ctrl.file}}"></edit-component>
     `,
   })

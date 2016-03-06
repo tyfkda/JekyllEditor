@@ -34,7 +34,7 @@ angular.module(kModuleName)
       <h1>Posts</h1>
       <div>
         <button ng-click="$ctrl.refresh()">Refresh</button>
-        <button ng-click="$ctrl.createNewPost()">New Post</button>
+        <new-post-button></new-post-button>
       </div>
       <div ng-show="$ctrl.posts==null">
         Loading...
@@ -48,4 +48,21 @@ angular.module(kModuleName)
         </li>
       </ul>
     `,
+  })
+
+class NewPostButtonController {
+  constructor($location) {
+    this._$location = $location
+  }
+
+  createNewPost() {
+    this._$location.path('/new_post')
+  }
+}
+angular.module(kModuleName)
+  .component('newPostButton', {
+    controller: ['$location', NewPostButtonController],
+    template: `
+      <button ng-click="$ctrl.createNewPost()">New post</button>
+    `
   })

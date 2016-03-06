@@ -8,11 +8,14 @@ class EditComponentController {
     this._$sce = $sce
     this._$timeout = $timeout
 
-    this.requestContents()
+    this.fileName = this.originalFileName
+    if (this.originalFileName) {
+      this.requestContents()
+    }
   }
 
   requestContents() {
-    this._$http({method: 'GET', url: `${Const.API}?action=post&file=${this.file}`})
+    this._$http({method: 'GET', url: `${Const.API}?action=post&file=${this.originalFileName}`})
       .then(response => {
         this.contents = response.data.contents
         this.setPreviewHtml(response.data.html)
@@ -30,7 +33,11 @@ class EditComponentController {
   }
 
   save() {
-    this._$http({method: 'PUT', url: `${Const.API}?action=post&file=${this.file}`,
+    if (!this.originalFileName) {
+      // 新規作成時
+      this.originalFileName = this.fileName
+    }
+    this._$http({method: 'PUT', url: `${Const.API}?action=post&file=${this.originalFileName}`,
                  data: this.contents
                 })
       .then(response => {
@@ -44,13 +51,13 @@ angular.module(kModuleName)
   .component('editComponent', {
     controller: ['$http', '$sce', '$timeout', EditComponentController],
     bindings: {
-      file: '@',
+      originalFileName: '@',
     },
     template: `
       <div style="position: relative; height:52px; overflow: hidden;">
         <div style="position: absolute; left: 0; top: 0; right: 100px; bottom: 0;">
           <a href="#/">back</a>
-          <input type="text" value="{{$ctrl.file}}" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
+          <input type="text" ng-model="$ctrl.fileName" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
         </div>
         <div style="position: absolute; top: 0; right: 0px; width: 100px; height: 100%;">
           <button class="save-btn" ng-click="$ctrl.save()">Save</button>
