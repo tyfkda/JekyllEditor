@@ -43,6 +43,8 @@ class EditComponentController {
     if (this.originalFileName == null) {  // New file.
       const t = new Date()
       this.info.date = `${t.getFullYear()}-${t.getMonth()+1}-${t.getDate()} ${t.getHours()}:${t.getMinutes()}:${t.getSeconds()}`
+      this.info.layout = Const.DEFAULT_LAYOUT
+      this.info.categories = Const.DEFAULT_CATEGORIES
     }
 
     const url = `${Const.API}?action=post${this.originalFileName?'&file='+this.originalFileName:''}`
