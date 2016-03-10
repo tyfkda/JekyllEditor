@@ -4,6 +4,7 @@
 
 require 'json'
 require 'kramdown'
+require 'rouge'
 require 'time'
 require 'yaml'
 
@@ -16,6 +17,26 @@ def glob(path, pattern)
   Dir.glob("#{path}/#{pattern}").map do |file|
     file.sub(%r!^#{path}/!, '')
   end
+end
+
+def convert_markdown_to_html(contents)
+  Kramdown::Document.new(contents, {
+      syntax_highlighter: 'rouge',
+      syntax_highlighter_opts: {
+        default_lang: 'ruby',
+        formatter: Rouge::Formatters::HTML,
+        'bold_every' => 8, 'css' => :class
+      },
+
+      'auto_ids'       => true,
+      'toc_levels'     => '1..6',
+      'entity_output'  => 'as_char',
+      'smart_quotes'   => 'lsquo,rsquo,ldquo,rdquo',
+      'input'          => "GFM",
+      'hard_wrap'      => false,
+      'footnote_nr'    => 1,
+    }).to_html
+
 end
 
 def read_jekyll_front_matter(fn, read_contents = false)
@@ -101,7 +122,7 @@ class JekyllEditor
     drafts = read_front_matters(glob(DRAFTS_PATH, '/*.md'), DRAFTS_PATH)
     res.headers = {
       'Status' => '200 OK',
-      'Content-Type' => 'text/json',
+      'Content-Type' => 'text/json; charset=utf-8',
     }
     res.out(JSON.dump({
           ok: true,
@@ -127,13 +148,13 @@ class JekyllEditor
     info, contents = read_jekyll_front_matter("#{POSTS_PATH}/#{req.params['file']}", true)
     res.headers = {
       'Status' => '200 OK',
-      'Content-Type' => 'text/json',
+      'Content-Type' => 'text/json; charset=utf-8',
     }
     res.out(JSON.dump({
           ok: true,
           info: info,
           contents: contents,
-          html: Kramdown::Document.new(contents).to_html,
+          html: convert_markdown_to_html(contents),
         }))
   end
 
@@ -162,7 +183,7 @@ class JekyllEditor
     res.out(JSON.dump({
           ok: true,
           file: file,
-          html: Kramdown::Document.new(contents).to_html,
+          html: convert_markdown_to_html(contents),
         }))
   end
 

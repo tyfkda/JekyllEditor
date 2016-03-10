@@ -1,3 +1,5 @@
+@import 'syntax-highlighting';
+
 $BG_COLOR: #ddd;
 
 * {
@@ -21,6 +23,10 @@ textarea {
   font-family: 'Anonymous Pro', "Courier", "Courier New", "平成角ゴシック", "Osaka-等幅", "ＭＳ ゴシック", monospace;
   font-size: 14px;
   line-height: 1.2;
+}
+
+code {
+  white-space: pre;
 }
 
 .pull-left {
