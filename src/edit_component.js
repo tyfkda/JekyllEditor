@@ -55,7 +55,10 @@ class EditComponentController {
                  },
                 })
       .then(response => {
-        this.originalFileName = response.data.file
+        if (this.originalFileName == null) {
+          // Redirect to edit page.
+          return this._$location.path(`edit/${response.data.file}`).replace()
+        }
         this.setPreviewHtml(response.data.html)
       }, response => {
         console.error(response)
