@@ -32,7 +32,7 @@ angular.module(kModuleName)
     template: `
       <h1>Posts</h1>
       <div>
-        <button ng-click="$ctrl.refresh()">Refresh</button>
+        <button class="btn btn-primary" ng-click="$ctrl.refresh()">Refresh</button>
         <new-post-button></new-post-button>
       </div>
       <div ng-show="$ctrl.posts==null">
@@ -62,6 +62,6 @@ angular.module(kModuleName)
   .component('newPostButton', {
     controller: ['$location', NewPostButtonController],
     template: `
-      <button ng-click="$ctrl.createNewPost()">New post</button>
+      <a class="btn btn-success" href="#/new_post">New post</a>
     `
   })

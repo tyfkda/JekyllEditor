@@ -87,12 +87,12 @@ angular.module(kModuleName)
     template: `
       <div style="position: relative; height:52px; overflow: hidden;">
         <div style="position: absolute; left: 0; top: 0; right: 100px; bottom: 0;">
-          <a href="#/">back</a>
+          <a class="btn btn-primary" href="#/">Back</a>
           <input type="text" ng-model="$ctrl.info.title" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
         </div>
         <div style="position: absolute; top: 0; right: 0px; width: 200px; height: 100%;">
-          <button class="delete-btn pull-right" ng-click="$ctrl.delete()" ng-disabled="!$ctrl.originalFileName">Delete</button>
-          <button class="save-btn pull-right" ng-click="$ctrl.save()">Save</button>
+          <button class="btn btn-danger pull-right" ng-click="$ctrl.delete()" ng-disabled="!$ctrl.originalFileName">Delete</button>
+          <button class="btn btn-success pull-right" ng-click="$ctrl.save()">Save</button>
           <div class="clear-fix"></div>
         </div>
       </div>
