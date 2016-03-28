@@ -116,10 +116,9 @@ angular.module(kModuleName)
           <a class="btn btn-primary" href="#/">Back</a>
           <input type="text" ng-model="$ctrl.info.title" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
         </div>
-        <div style="position: absolute; top: 0; right: 0px; width: 200px; height: 100%;">
+        <div class="clearfix" style="position: absolute; top: 0; right: 0px; width: 200px; height: 100%;">
           <button class="btn btn-danger pull-right" ng-click="$ctrl.delete()" ng-disabled="!$ctrl.originalFileName">Delete</button>
           <button class="btn btn-success pull-right" ng-click="$ctrl.save()">Save</button>
-          <div class="clear-fix"></div>
         </div>
       </div>
       <div style="position: absolute; left: 0; top: 52px; right: 0; bottom: 0;">
