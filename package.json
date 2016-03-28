@@ -1,7 +1,7 @@
 {
-  "name": "FrontendTemplate",
+  "name": "JekyllEditor",
   "version": "0.0.1",
-  "description": "FrontendTemplate",
+  "description": "Web interface to edit jekyll posts",
   "main": "index.js",
   "scripts": {
     "start": "gulp",
@@ -15,7 +15,7 @@
   "author": "tyfkda",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tyfkda/FrontendTemplate"
+    "url": "https://github.com/tyfkda/JekyllEditor"
   },
   "license": "Unlicense",
   "devDependencies": {
