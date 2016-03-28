@@ -2,6 +2,32 @@ import kModuleName from './app_module_def'
 
 import Const from './const'
 
+// Article editor.
+angular.module(kModuleName)
+  .component('articleEditor', {
+    bindings: {
+      contents: '=',
+    },
+    template: `
+<div style="position: absolute; width: 100%; height: 100%;">
+  <textarea style="width: 100%; height: 100%; padding: 4px; border: 1px solid gray; border-radius: 6px 0 0 6px; resize: none;"
+            ng-model="$ctrl.contents"></textarea>
+</div>
+      `})
+
+// Previewer component.
+angular.module(kModuleName)
+  .component('previewer', {
+    bindings: {
+      html: '=',
+    },
+    template: `
+<div style="position: absolute; width: 100%; height: 100%; overflow-y: scroll; padding: 4px;"
+     ng-bind-html="$ctrl.html">
+</div>
+      `})
+
+// Edit component.
 class EditComponentController {
   constructor($http, $location, $sce, $timeout) {
     this._$http = $http
@@ -99,16 +125,12 @@ angular.module(kModuleName)
       <div style="position: absolute; left: 0; top: 52px; right: 0; bottom: 0;">
         <div style="position: absolute; width: 50%; height: 100%; left: 0; top: 0;">
           <div style="position: absolute; left: 4px; top: 4px; right: 0; bottom: 4px;">
-            <div style="position: absolute; width: 100%; height: 100%;">
-              <textarea style="width: 100%; height: 100%; padding: 4px; border: 1px solid gray; border-radius: 6px 0 0 6px; resize: none;"
-                        ng-model="$ctrl.contents"></textarea>
-            </div>
+            <article-editor contents="$ctrl.contents"></article-editor>
           </div>
         </div>
         <div style="position: absolute; width: 50%; height: 100%; right: 0; top: 0;">
           <div style="position: absolute; left: 0; top: 4px; right: 4px; bottom: 4px; border: 1px solid gray; border-radius: 0 6px 6px 0;">
-            <div style="position: absolute; width: 100%; height: 100%; overflow-y: scroll; padding: 4px;" ng-bind-html="$ctrl.preview">
-            </div>
+            <previewer html="$ctrl.preview"></previewer>
           </div>
         </div>
       </div>
