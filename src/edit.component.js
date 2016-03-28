@@ -45,6 +45,10 @@ class EditComponentController {
         this.mainName = m[2]
       }
       this.requestContents()
+    } else {
+      const d = new Date()
+      const zeroPadding2 = (n) => _.padStart(String(n), 2, '0')
+      this.date = `${d.getFullYear()}-${zeroPadding2(d.getMonth() + 1)}-${zeroPadding2(d.getDate())}`
     }
 
     $('#edit-main-name-modal').on('shown.bs.modal', function() {
