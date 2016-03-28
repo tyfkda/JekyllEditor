@@ -41,7 +41,7 @@ const releaseDir = './release'
 const releaseAssetsDir = `${releaseDir}/assets`
 
 const convertHtml = (buildTarget, dest) => {
-  gulp.src([srcHtmlFiles,
+  return gulp.src([srcHtmlFiles,
             '!' + srcHtmlDir + '/**/_*.html'])
     .pipe(plumber())
     .pipe(ejs({buildTarget: buildTarget}))
@@ -77,7 +77,7 @@ const lint = (glob) => {
 }
 
 const buildWhenModified = (glob, buildFunc) => {
-  gulp.watch(glob, (obj) => {
+  return gulp.watch(glob, (obj) => {
     if (obj.type === 'changed')
       buildFunc(obj.path)
   })
@@ -93,7 +93,7 @@ gulp.task('watch', ['build', 'server', 'watch-es6', 'watch-lint', 'watch-test'],
 gulp.task('build', ['html', 'es6', 'sass', 'copy-res'])
 
 gulp.task('html', () => {
-  convertHtml('debug', destDir)
+  return convertHtml('debug', destDir)
 })
 
 gulp.task('es6', () => {
@@ -101,8 +101,8 @@ gulp.task('es6', () => {
 })
 
 gulp.task('watch-es6', [], () => {
-  buildWhenModified(srcEs6Files,
-                    buildEs6ForDebug)
+  return buildWhenModified(srcEs6Files,
+                           buildEs6ForDebug)
 })
 
 gulp.task('lint', () => {
@@ -114,14 +114,14 @@ gulp.task('lint', () => {
 })
 
 gulp.task('watch-lint', [], () => {
-  buildWhenModified([srcEs6Files,
-                     srcTestFiles,
-                     'gulpfile.babel.js'],
-                    lint)
+  return buildWhenModified([srcEs6Files,
+                            srcTestFiles,
+                            'gulpfile.babel.js'],
+                           lint)
 })
 
 gulp.task('sass', () => {
-  gulp.src(srcSassFiles)
+  return gulp.src(srcSassFiles)
     .pipe(plumber())
     .pipe(sass())
     .pipe(cssnano())
@@ -156,14 +156,14 @@ const testFiles = [
   srcTestFiles,
 ]
 gulp.task('test', () => {
-  gulp.src(testFiles)
+  return gulp.src(testFiles)
     .pipe(karma({
       configFile: 'karma.conf.js',
     }))
     .on('error', err => console.log('Error : ' + err.message))
 })
 gulp.task('watch-test', () => {
-  gulp.src(testFiles)
+  return gulp.src(testFiles)
     .pipe(karma({
       configFile: 'karma.conf.js',
       action: 'watch',
