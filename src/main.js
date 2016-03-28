@@ -1,9 +1,9 @@
 import kModuleName from './app_module_def'
 
-import './edit_component'
-import './edit_page'
-import './new_post_page'
-import './top_page'
+import './edit.component'
+import './edit.page'
+import './new_post.page'
+import './top.page'
 
 const APP = 'app'
 angular.module(APP, ['ngRoute', kModuleName])
