@@ -35,12 +35,24 @@ class EditComponentController {
     this._$sce = $sce
     this._$timeout = $timeout
 
-    this.fileName = this.originalFileName
     this.info = {
     }
     if (this.originalFileName) {
+      this.fileName = this.originalFileName
+      const m = this.fileName.match(/^(\d+-\d+-\d+)-(.*)(.md)/)
+      if (m) {
+        this.date = m[1]
+        this.mainName = m[2]
+      }
       this.requestContents()
     }
+
+    $('#edit-main-name-modal').on('shown.bs.modal', function() {
+      $('#main-name-input').focus().select()
+    })
+    $('#edit-date-modal').on('shown.bs.modal', function() {
+      $('#date-input').focus().select()
+    })
   }
 
   requestContents() {
@@ -55,6 +67,16 @@ class EditComponentController {
           this._$location.path('/')
         }
       })
+  }
+
+  updateMainName() {
+    this.mainName = this.mainNameForEdit
+    $('#edit-main-name-modal').modal('hide')
+  }
+
+  updateDate() {
+    this.date = this.dateForEdit
+    $('#edit-date-modal').modal('hide')
   }
 
   setPreviewHtml(previewHtml) {
@@ -112,13 +134,49 @@ angular.module(kModuleName)
     },
     template: `
       <div style="position: relative; height:52px; overflow: hidden;">
-        <div style="position: absolute; left: 0; top: 0; right: 100px; bottom: 0;">
+        <div style="position: absolute; left: 0; top: 0; right: 350px; bottom: 0;">
           <a class="btn btn-primary" href="#/">Back</a>
           <input type="text" ng-model="$ctrl.info.title" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
         </div>
-        <div class="clearfix" style="position: absolute; top: 0; right: 0px; width: 200px; height: 100%;">
+        <div class="clearfix" style="position: absolute; top: 0; right: 0px; width: 350px; height: 100%;">
           <button class="btn btn-danger pull-right" ng-click="$ctrl.delete()" ng-disabled="!$ctrl.originalFileName">Delete</button>
           <button class="btn btn-success pull-right" ng-click="$ctrl.save()">Save</button>
+          <button class="btn btn-normal pull-right"
+                  style="margin-right: 16px; width: 100px; overflow: hidden;"
+                  ng-click="$ctrl.mainNameForEdit=$ctrl.mainName"
+                  data-toggle="modal" data-target="#edit-main-name-modal">{{$ctrl.mainName?$ctrl.mainName:'MainName'}}</button>
+          <button class="btn btn-normal pull-right"
+                  ng-click="$ctrl.dateForEdit=$ctrl.date"
+                  data-toggle="modal" data-target="#edit-date-modal">{{$ctrl.date?$ctrl.date:'Date'}}</button>
+
+          <div id="edit-main-name-modal" class="modal">
+            <div class="modal-content">
+              <div class="modal-header">Edit mainname</div>
+              <div class="modal-body">
+                <input id="main-name-input" type="text"
+                       ng-model="$ctrl.mainNameForEdit"
+                       ng-keyup="$event.keyCode==13&&$ctrl.updateMainName()">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" ng-click="$ctrl.updateMainName()">OK</button>
+              </div>
+            </div>
+          </div>
+          <div id="edit-date-modal" class="modal">
+            <div class="modal-content">
+              <div class="modal-header">Edit date</div>
+              <div class="modal-body">
+                <input id="date-input" type="text"
+                       ng-model="$ctrl.dateForEdit"
+                       ng-keyup="$event.keyCode==13&&$ctrl.updateDate()">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" ng-click="$ctrl.updateDate()">OK</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       <div style="position: absolute; left: 0; top: 52px; right: 0; bottom: 0;">
