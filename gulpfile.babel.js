@@ -90,7 +90,7 @@ gulp.task('watch', ['build', 'server', 'watch-es6', 'watch-lint', 'watch-test'],
   gulp.watch(srcSassFiles, ['sass'])
 })
 
-gulp.task('build', ['html', 'es6', 'sass'])
+gulp.task('build', ['html', 'es6', 'sass', 'copy-res'])
 
 gulp.task('html', () => {
   convertHtml('debug', destDir)
@@ -127,6 +127,12 @@ gulp.task('sass', () => {
     .pipe(cssnano())
     .pipe(gulp.dest(assetsDir))
     .pipe(browserSync.reload({stream: true}))
+})
+
+gulp.task('copy-res', () => {
+  return gulp.src([`assets/**/*.*`],
+                  {base: 'assets'})
+    .pipe(gulp.dest(assetsDir))
 })
 
 const devServer = (_port) => {
@@ -166,10 +172,8 @@ gulp.task('watch-test', () => {
 
 gulp.task('clean', del.bind(null, [
   `${destDir}/index.html`,
-  `${assetsDir}/*.js`,  // */
-  `${assetsDir}/*.map`,  // */
-  `${assetsDir}/*.css`,  // */
-  `${destJsDevDir}`,  // */
+  `${assetsDir}`,
+  `${destJsDevDir}`,
 ]))
 
 gulp.task('release', ['build'], () => {
