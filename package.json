@@ -4,6 +4,7 @@
   "description": "FrontendTemplate",
   "main": "index.js",
   "scripts": {
+    "start": "gulp",
     "build": "gulp build",
     "watch": "gulp watch",
     "server": "gulp server",
