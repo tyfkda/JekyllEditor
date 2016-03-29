@@ -50,12 +50,19 @@ class EditComponentController {
       const zeroPadding2 = (n) => _.padStart(String(n), 2, '0')
       this.date = `${d.getFullYear()}-${zeroPadding2(d.getMonth() + 1)}-${zeroPadding2(d.getDate())}`
     }
+    this.dateForEdit = this.date
 
     $('#edit-main-name-modal').on('shown.bs.modal', function() {
       $('#main-name-input').focus().select()
     })
     $('#edit-date-modal').on('shown.bs.modal', function() {
       $('#date-input').focus().select()
+    })
+
+    $timeout(() => {
+      $('.datepicker').datepicker({
+        format: 'yyyy-mm-dd',
+      })
     })
   }
 
@@ -76,6 +83,11 @@ class EditComponentController {
   updateMainName() {
     this.mainName = this.mainNameForEdit
     $('#edit-main-name-modal').modal('hide')
+  }
+
+  startEditDate() {
+    this.dateForEdit = this.date
+    $('.datepicker').datepicker('update', this.dateForEdit)
   }
 
   updateDate() {
@@ -150,7 +162,7 @@ angular.module(kModuleName)
                   ng-click="$ctrl.mainNameForEdit=$ctrl.mainName"
                   data-toggle="modal" data-target="#edit-main-name-modal">{{$ctrl.mainName?$ctrl.mainName:'MainName'}}</button>
           <button class="btn btn-normal pull-right"
-                  ng-click="$ctrl.dateForEdit=$ctrl.date"
+                  ng-click="$ctrl.startEditDate()"
                   data-toggle="modal" data-target="#edit-date-modal">{{$ctrl.date?$ctrl.date:'Date'}}</button>
 
           <div id="edit-main-name-modal" class="modal">
@@ -171,9 +183,14 @@ angular.module(kModuleName)
             <div class="modal-content">
               <div class="modal-header">Edit date</div>
               <div class="modal-body">
-                <input id="date-input" type="text"
+                <!--input id="date-input-old" type="text"
+                       class="form-control datepicker"
                        ng-model="$ctrl.dateForEdit"
-                       ng-keyup="$event.keyCode==13&&$ctrl.updateDate()">
+                       value="{{$ctrl.dateForEdit}}"
+                       xxxng-keyup="$event.keyCode==13&&$ctrl.updateDate()"-->
+                <input id="date-input"
+                       class="form-control datepicker"
+                       ng-model="$ctrl.dateForEdit">
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
