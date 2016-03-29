@@ -2,6 +2,17 @@ import kModuleName from './app_module_def'
 
 import Const from './const'
 
+function zeroPadding2(n) {
+  return _.padStart(String(n), 2, '0')
+}
+
+function getDateString(date) {
+  const year = date.getFullYear()
+  const month = zeroPadding2(date.getMonth() + 1)
+  const day = zeroPadding2(date.getDate())
+  return `${year}-${month}-${day}`
+}
+
 // Article editor.
 angular.module(kModuleName)
   .component('articleEditor', {
@@ -35,8 +46,7 @@ class EditComponentController {
     this._$sce = $sce
     this._$timeout = $timeout
 
-    this.info = {
-    }
+    this.info = {}
     if (this.originalFileName) {
       this.fileName = this.originalFileName
       const m = this.fileName.match(/^(\d+-\d+-\d+)-(.*)(.md)/)
@@ -46,9 +56,8 @@ class EditComponentController {
       }
       this.requestContents()
     } else {
-      const d = new Date()
-      const zeroPadding2 = (n) => _.padStart(String(n), 2, '0')
-      this.date = `${d.getFullYear()}-${zeroPadding2(d.getMonth() + 1)}-${zeroPadding2(d.getDate())}`
+      this.date = getDateString(new Date())
+      this.mainName = String(new Date().getTime())
     }
     this.dateForEdit = this.date
 
@@ -72,6 +81,8 @@ class EditComponentController {
         this.info = response.data.info
         this.contents = response.data.contents
         this.setPreviewHtml(response.data.html)
+        // Get date from front_matters
+        this.date = getDateString(new Date(this.info.date))
       }, response => {
         console.error(response)
         if (response.status == 404) {  // Not Found
@@ -91,7 +102,7 @@ class EditComponentController {
   }
 
   updateDate() {
-    this.date = this.dateForEdit
+    this.info.date = this.date = this.dateForEdit
     $('#edit-date-modal').modal('hide')
   }
 
@@ -106,12 +117,23 @@ class EditComponentController {
   save() {
     if (this.originalFileName == null) {  // New file.
       const t = new Date()
-      this.info.date = `${t.getFullYear()}-${t.getMonth()+1}-${t.getDate()} ${t.getHours()}:${t.getMinutes()}:${t.getSeconds()}`
+      this.info.date = this.date
       this.info.layout = Const.DEFAULT_LAYOUT
       this.info.categories = Const.DEFAULT_CATEGORIES
     }
 
-    const url = `${Const.API}?action=post${this.originalFileName?'&file='+this.originalFileName:''}`
+    const param = {
+      action: 'post',
+      file: this.originalFileName,
+    }
+    const newFileName = `${this.date}-${this.mainName}.md`
+
+    if (newFileName != param.file) {
+      param.file = newFileName
+      if (this.originalFileName)
+        param.originalFileName = this.originalFileName
+    }
+    const url = `${Const.API}?${$.param(param)}`
     this._$http({method: 'PUT', url,
                  data: {
                    info: this.info,
@@ -119,7 +141,7 @@ class EditComponentController {
                  },
                 })
       .then(response => {
-        if (this.originalFileName == null) {
+        if (this.originalFileName !== response.data.file) {
           // Redirect to edit page.
           return this._$location.path(`edit/${response.data.file}`).replace()
         }

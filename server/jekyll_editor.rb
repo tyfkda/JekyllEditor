@@ -2,6 +2,7 @@
 
 #$LOAD_PATH.push(File.dirname(__FILE__))
 
+require 'fileutils'
 require 'json'
 require 'kramdown'
 require 'rouge'
@@ -163,13 +164,18 @@ class JekyllEditor
     front_matters = json['info']
     front_matters['date'] = Time.parse(front_matters['date'])
 
+    if req.params['originalFileName']
+      FileUtils.rm("#{POSTS_PATH}/#{req.params['originalFileName']}")
+    end
+
     file = req.params['file']
     unless file  # New file
       file = "#{front_matters['date'].strftime('%Y-%m-%d')}-#{Time.now.to_i.to_s}.md"
     end
 
     contents = json['contents']
-    open("#{POSTS_PATH}/#{file}", 'w', 0777) do |f|
+    out_path = "#{POSTS_PATH}/#{file}"
+    open(out_path, 'w', 0777) do |f|
       f.write(%!\
 #{front_matters.to_yaml}\
 ---
