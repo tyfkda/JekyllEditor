@@ -85,15 +85,19 @@ const buildWhenModified = (glob, buildFunc) => {
 
 gulp.task('default', ['watch'])
 
-gulp.task('watch', ['build', 'server', 'watch-es6', 'watch-lint', 'watch-test'], () => {
-  gulp.watch(srcHtmlFiles, ['html'])
-  gulp.watch(srcSassFiles, ['sass'])
-})
+const kWatchDeps = ['build', 'server',
+                   'watch-html', 'watch-es6', 'watch-sass',
+                   'watch-lint', 'watch-test']
+gulp.task('watch', kWatchDeps)
 
 gulp.task('build', ['html', 'es6', 'sass', 'copy-res'])
 
 gulp.task('html', () => {
   return convertHtml('debug', destDir)
+})
+
+gulp.task('watch-html', [], () => {
+  gulp.watch(srcHtmlFiles, ['html'])
 })
 
 gulp.task('es6', () => {
@@ -127,6 +131,10 @@ gulp.task('sass', () => {
     .pipe(cssnano())
     .pipe(gulp.dest(assetsDir))
     .pipe(browserSync.reload({stream: true}))
+})
+
+gulp.task('watch-sass', [], () => {
+  gulp.watch(srcSassFiles, ['sass'])
 })
 
 gulp.task('copy-res', () => {
