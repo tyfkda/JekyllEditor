@@ -121,6 +121,8 @@ class EditComponentController {
       this.info.layout = Const.DEFAULT_LAYOUT
       this.info.categories = Const.DEFAULT_CATEGORIES
     }
+    if (!this.info.title)
+      this.info.title = 'NO TITLE'
 
     const param = {
       action: 'post',
