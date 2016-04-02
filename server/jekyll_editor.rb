@@ -173,14 +173,14 @@ class JekyllEditor
       file = "#{front_matters['date'].strftime('%Y-%m-%d')}-#{Time.now.to_i.to_s}.md"
     end
 
-    contents = json['contents']
+    contents = json['contents'] || ''
     out_path = "#{POSTS_PATH}/#{file}"
     open(out_path, 'w', 0777) do |f|
       f.write(%!\
 #{front_matters.to_yaml}\
 ---
 
-#{contents.chomp}!)
+#{contents}!)
     end
     res.headers = {
       'Status' => '200 OK',
