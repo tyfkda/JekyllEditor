@@ -3,12 +3,7 @@
 
 $LOAD_PATH.push(File.dirname(__FILE__))
 
-#require 'cgi'
-
 require "#{File.dirname(__FILE__)}/jekyll_editor"
-
-#ENV['REQUEST_METHOD'] = 'GET'
-#ENV['QUERY_STRING'] = 'action=post&file=2015-11-24-mathjax.md'
 
 class MyCgi
   attr_reader :method, :params, :body
