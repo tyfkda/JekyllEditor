@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby -Ku
 
-#$LOAD_PATH.push(File.dirname(__FILE__))
-
 require 'fileutils'
 require 'json'
 require 'kramdown'
@@ -9,7 +7,7 @@ require 'rouge'
 require 'time'
 require 'yaml'
 
-require ',config'
+require "#{File.dirname(__FILE__)}/,config"
 
 POSTS_PATH = "#{CONFIG[:jekyll_base_path]}/_posts"
 DRAFTS_PATH = "#{CONFIG[:jekyll_base_path]}/_drafts"
@@ -41,7 +39,6 @@ def convert_markdown_to_html(contents)
       'hard_wrap'      => false,
       'footnote_nr'    => 1,
     }).to_html
-
 end
 
 def read_jekyll_front_matter(fn, read_contents = false)
