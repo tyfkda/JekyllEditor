@@ -111,6 +111,7 @@ class EditComponentController {
 
     this._$timeout(() => {
       MathJax.Hub.Queue(['Typeset', MathJax.Hub])
+      $('previewer a').attr({target: '_blank'})
     })
   }
 
