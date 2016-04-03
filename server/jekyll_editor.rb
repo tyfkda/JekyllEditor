@@ -120,7 +120,6 @@ class JekyllEditor
 
   def get_list(req, res)
     posts = read_front_matters(glob(POSTS_PATH, '*.md'), POSTS_PATH)
-    drafts = read_front_matters(glob(DRAFTS_PATH, '/*.md'), DRAFTS_PATH)
     res.headers = {
       'Status' => '200 OK',
       'Content-Type' => 'text/json; charset=utf-8',
@@ -128,7 +127,6 @@ class JekyllEditor
     res.out(JSON.dump({
           ok: true,
           posts: posts,
-          drafts: drafts,
         }))
   end
 
