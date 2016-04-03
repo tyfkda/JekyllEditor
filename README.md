@@ -1,28 +1,34 @@
-FrontendTemplate
-================
+JekyllEditor
+============
 
-Project template for frontend development:
-
-* ES6 (JavaScript) + eslint
-* HTML
-* SASS (CSS)
-* JS test: Jasmine + Karma
+Web frontend for Jekyll, running on Apache/CGI.
 
 
-## Requirement
+## Requirement for development
 
 * node.js
 * npm
+* Ruby
+* Rubygems
 
 
 ## Set up
 
 ```
 $ npm install
+$ bundle install
 ```
 
 
 ## Usage
+
+### Build (automatically)
+
+```
+$ npm start
+```
+
+* You can see the page in http://localhost:3000/
 
 ### Build (one shot)
 
@@ -31,13 +37,6 @@ $ npm run build
 ```
 
 * Files are generated in `public`
-* You can see the page in http://localhost:3000/
-
-### Build (automatically)
-
-```
-$ npm run watch
-```
 
 ### Release
 
