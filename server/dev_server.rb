@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby -Ku
 
 $LOAD_PATH.push(File.dirname(__FILE__))
 
