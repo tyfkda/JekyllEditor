@@ -15,7 +15,11 @@ POSTS_PATH = "#{CONFIG[:jekyll_base_path]}/_posts"
 DRAFTS_PATH = "#{CONFIG[:jekyll_base_path]}/_drafts"
 
 def glob(path, pattern)
-  Dir.glob("#{path}/#{pattern}").map do |file|
+  if pattern.is_a?(String)
+    pattern = pattern.split("\0")
+  end
+
+  Dir.glob(pattern.map {|pat| "#{path}/#{pat}"}).map do |file|
     file.sub(%r!^#{path}/!, '')
   end
 end
@@ -119,7 +123,7 @@ class JekyllEditor
   end
 
   def get_list(req, res)
-    posts = read_front_matters(glob(POSTS_PATH, '*.md'), POSTS_PATH)
+    posts = read_front_matters(glob(POSTS_PATH, ['*.md', '*.markdown']), POSTS_PATH)
     res.headers = {
       'Status' => '200 OK',
       'Content-Type' => 'text/json; charset=utf-8',

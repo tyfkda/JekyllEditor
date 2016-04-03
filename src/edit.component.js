@@ -49,7 +49,7 @@ class EditComponentController {
     this.info = {}
     if (this.originalFileName) {
       this.fileName = this.originalFileName
-      const m = this.fileName.match(/^(\d+-\d+-\d+)-(.*)(.md)/)
+      const m = this.fileName.match(/^(\d+-\d+-\d+)-(.*)\.(md|markdown)/)
       if (m) {
         this.date = m[1]
         this.mainName = m[2]
@@ -115,11 +115,17 @@ class EditComponentController {
   }
 
   save() {
+    let extension = 'md'
     if (this.originalFileName == null) {  // New file.
       const t = new Date()
       this.info.date = this.date
       this.info.layout = Const.DEFAULT_LAYOUT
       this.info.categories = Const.DEFAULT_CATEGORIES
+    } else {
+      const m = this.fileName.match(/^(\d+-\d+-\d+)-(.*)\.(md|markdown)/)
+      if (m) {
+        extension = m[3]
+      }
     }
     if (!this.info.title)
       this.info.title = 'NO TITLE'
@@ -128,7 +134,7 @@ class EditComponentController {
       action: 'post',
       file: this.originalFileName,
     }
-    const newFileName = `${this.date}-${this.mainName}.md`
+    const newFileName = `${this.date}-${this.mainName}.${extension}`
 
     if (newFileName != param.file) {
       param.file = newFileName
