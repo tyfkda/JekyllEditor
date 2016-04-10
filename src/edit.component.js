@@ -214,11 +214,6 @@ angular.module(kModuleName)
             <div class="modal-content">
               <div class="modal-header">Edit date</div>
               <div class="modal-body">
-                <!--input id="date-input-old" type="text"
-                       class="form-control datepicker"
-                       ng-model="$ctrl.dateForEdit"
-                       value="{{$ctrl.dateForEdit}}"
-                       xxxng-keyup="$event.keyCode==13&&$ctrl.updateDate()"-->
                 <input id="date-input"
                        class="form-control datepicker"
                        ng-model="$ctrl.dateForEdit">
