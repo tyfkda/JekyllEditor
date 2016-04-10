@@ -44,6 +44,7 @@ angular.module(kModuleName)
       <ul ng-show="$ctrl.posts&&$ctrl.posts.length!=0">
         <li ng-repeat="post in $ctrl.posts">
           {{post.date}} <a ng-href="{{$ctrl.getPostUrl(post)}}">{{post.title}}</a>
+          <tag ng-repeat="tag in post.tags"><span class="label label-primary">{{tag}}</span></tagn>
         </li>
       </ul>
     `,
