@@ -2,6 +2,10 @@
 
 $BG_COLOR: #ddd;
 
+html, body {
+  height: 100%;
+}
+
 body {
   background-color: $BG_COLOR;
   font-family: "Helvetica Neue", Helvetica, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
@@ -33,4 +37,8 @@ previewer {
     border: 1px solid black;
     padding: 4px;
   }
+}
+
+.full-height {
+  height: 100%;
 }
