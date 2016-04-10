@@ -83,12 +83,19 @@ class EditComponentController {
         this.setPreviewHtml(response.data.html)
         // Get date from front_matters
         this.date = getDateString(new Date(this.info.date))
+        if ('tags' in this.info)
+          this.tag = this.info.tags.join(', ')
       }, response => {
         console.error(response)
         if (response.status == 404) {  // Not Found
           this._$location.path('/')
         }
       })
+  }
+
+  updateTag() {
+    this.tag = this.tagForEdit
+    $('#edit-tag-modal').modal('hide')
   }
 
   updateMainName() {
@@ -118,7 +125,6 @@ class EditComponentController {
   save() {
     let extension = 'md'
     if (this.originalFileName == null) {  // New file.
-      const t = new Date()
       this.info.date = this.date
       this.info.layout = Const.DEFAULT_LAYOUT
       this.info.categories = Const.DEFAULT_CATEGORIES
@@ -130,6 +136,9 @@ class EditComponentController {
     }
     if (!this.info.title)
       this.info.title = 'NO TITLE'
+    if (this.tag) {
+      this.info.tags = this.tag.split(/,\s*/).filter(t => t)
+    }
 
     const param = {
       action: 'post',
@@ -181,21 +190,39 @@ angular.module(kModuleName)
     },
     template: `
       <div style="position: relative; height:52px; overflow: hidden;">
-        <div style="position: absolute; left: 0; top: 0; right: 350px; bottom: 0;">
+        <div style="position: absolute; left: 0; top: 0; right: 450px; bottom: 0;">
           <a class="btn btn-primary" href="#/">Back</a>
           <input type="text" ng-model="$ctrl.info.title" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
         </div>
-        <div class="clearfix" style="position: absolute; top: 0; right: 0px; width: 350px; height: 100%;">
+        <div class="clearfix" style="position: absolute; top: 0; right: 0px; width: 450px; height: 100%;">
           <button class="btn btn-danger pull-right" ng-click="$ctrl.delete()" ng-disabled="!$ctrl.originalFileName">Delete</button>
           <button class="btn btn-success pull-right" ng-click="$ctrl.save()">Save</button>
           <button class="btn btn-normal pull-right"
                   style="margin-right: 16px; width: 100px; overflow: hidden;"
+                  ng-click="$ctrl.tagForEdit=$ctrl.tag"
+                  data-toggle="modal" data-target="#edit-tag-modal">{{$ctrl.tag?$ctrl.tag:'tag'}}</button>
+          <button class="btn btn-normal pull-right"
+                  style="width: 100px; overflow: hidden;"
                   ng-click="$ctrl.mainNameForEdit=$ctrl.mainName"
                   data-toggle="modal" data-target="#edit-main-name-modal">{{$ctrl.mainName?$ctrl.mainName:'MainName'}}</button>
           <button class="btn btn-normal pull-right"
                   ng-click="$ctrl.startEditDate()"
                   data-toggle="modal" data-target="#edit-date-modal">{{$ctrl.date?$ctrl.date:'Date'}}</button>
 
+          <div id="edit-tag-modal" class="modal">
+            <div class="modal-content">
+              <div class="modal-header">Edit tag</div>
+              <div class="modal-body">
+                <input id="main-name-input" type="text"
+                       ng-model="$ctrl.tagForEdit"
+                       ng-keyup="$event.keyCode==13&&$ctrl.updateTag()">
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" ng-click="$ctrl.updateTag()">OK</button>
+              </div>
+            </div>
+          </div>
           <div id="edit-main-name-modal" class="modal">
             <div class="modal-content">
               <div class="modal-header">Edit mainname</div>
