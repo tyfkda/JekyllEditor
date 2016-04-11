@@ -94,8 +94,8 @@ class JekyllEditor
     when 'post'
       get_post(req, res)
     else
-      res.status(400)
-      res.out('Bad action')
+      res.status('400 Bad Request')
+      res.out('Bad Request (illegal action)')
     end
   end
 
@@ -104,8 +104,8 @@ class JekyllEditor
     when 'post'
       put_post(req, res)
     else
-      res.status(400)
-      res.out('Bad action')
+      res.status('400 Bad Request')
+      res.out('Bad Request (illegal action)')
     end
   end
 
@@ -114,8 +114,8 @@ class JekyllEditor
     when 'post'
       delete_post(req, res)
     else
-      res.status(400)
-      res.out('Bad action')
+      res.status('400 Bad Request')
+      res.out('Bad Request (illegal action)')
     end
   end
 
@@ -237,7 +237,7 @@ class MyResponse
     if value
       return @headers['Status'] = value
     end
-    @headers['Status'] || 200
+    @headers['Status'] ||= '200 OK'
   end
 
   def to_s
