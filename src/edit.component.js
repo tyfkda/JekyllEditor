@@ -197,18 +197,12 @@ angular.module(kModuleName)
         <div class="clearfix" style="position: absolute; top: 0; right: 0px; width: 450px; height: 100%;">
           <button class="btn btn-danger pull-right" ng-click="$ctrl.delete()" ng-disabled="!$ctrl.originalFileName">Delete</button>
           <button class="btn btn-success pull-right" ng-click="$ctrl.save()">Save</button>
+
+          <!-- tag -->
           <button class="btn btn-normal pull-right"
                   style="margin-right: 16px; width: 100px; overflow: hidden;"
                   ng-click="$ctrl.tagForEdit=$ctrl.tag"
                   data-toggle="modal" data-target="#edit-tag-modal">{{$ctrl.tag?$ctrl.tag:'tag'}}</button>
-          <button class="btn btn-normal pull-right"
-                  style="width: 100px; overflow: hidden;"
-                  ng-click="$ctrl.mainNameForEdit=$ctrl.mainName"
-                  data-toggle="modal" data-target="#edit-main-name-modal">{{$ctrl.mainName?$ctrl.mainName:'MainName'}}</button>
-          <button class="btn btn-normal pull-right"
-                  ng-click="$ctrl.startEditDate()"
-                  data-toggle="modal" data-target="#edit-date-modal">{{$ctrl.date?$ctrl.date:'Date'}}</button>
-
           <div id="edit-tag-modal" class="modal">
             <div class="modal-content">
               <div class="modal-header">Edit tag</div>
@@ -223,6 +217,12 @@ angular.module(kModuleName)
               </div>
             </div>
           </div>
+
+          <!-- filename -->
+          <button class="btn btn-normal pull-right"
+                  style="width: 100px; overflow: hidden;"
+                  ng-click="$ctrl.mainNameForEdit=$ctrl.mainName"
+                  data-toggle="modal" data-target="#edit-main-name-modal">{{$ctrl.mainName?$ctrl.mainName:'MainName'}}</button>
           <div id="edit-main-name-modal" class="modal">
             <div class="modal-content">
               <div class="modal-header">Edit mainname</div>
@@ -237,6 +237,11 @@ angular.module(kModuleName)
               </div>
             </div>
           </div>
+
+          <!-- date -->
+          <button class="btn btn-normal pull-right"
+                  ng-click="$ctrl.startEditDate()"
+                  data-toggle="modal" data-target="#edit-date-modal">{{$ctrl.date?$ctrl.date:'Date'}}</button>
           <div id="edit-date-modal" class="modal">
             <div class="modal-content">
               <div class="modal-header">Edit date</div>
