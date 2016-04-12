@@ -61,6 +61,9 @@ class EditComponentController {
     }
     this.dateForEdit = this.date
 
+    $('#edit-tag-modal').on('shown.bs.modal', function() {
+      $('#tag-input').focus().select()
+    })
     $('#edit-main-name-modal').on('shown.bs.modal', function() {
       $('#main-name-input').focus().select()
     })
@@ -207,7 +210,7 @@ angular.module(kModuleName)
             <div class="modal-content">
               <div class="modal-header">Edit tag</div>
               <div class="modal-body">
-                <input id="main-name-input" type="text"
+                <input id="tag-input" type="text"
                        ng-model="$ctrl.tagForEdit"
                        ng-keyup="$event.keyCode==13&&$ctrl.updateTag()">
               </div>
