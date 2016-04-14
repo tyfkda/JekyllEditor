@@ -205,16 +205,18 @@ angular.module(kModuleName)
                   ng-click="$ctrl.tagForEdit=$ctrl.tag"
                   data-toggle="modal" data-target="#edit-tag-modal">{{$ctrl.tag?$ctrl.tag:'tag'}}</button>
           <div id="edit-tag-modal" class="modal">
-            <div class="modal-content">
-              <div class="modal-header">Edit tag</div>
-              <div class="modal-body">
-                <input id="tag-input" type="text"
-                       ng-model="$ctrl.tagForEdit"
-                       ng-keyup="$event.keyCode==13&&$ctrl.updateTag()">
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" ng-click="$ctrl.updateTag()">OK</button>
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">Edit tag</div>
+                <div class="modal-body">
+                  <input id="tag-input" type="text"
+                         ng-model="$ctrl.tagForEdit"
+                         ng-keyup="$event.keyCode==13&&$ctrl.updateTag()">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-primary" ng-click="$ctrl.updateTag()">OK</button>
+                </div>
               </div>
             </div>
           </div>
@@ -225,16 +227,18 @@ angular.module(kModuleName)
                   ng-click="$ctrl.mainNameForEdit=$ctrl.mainName"
                   data-toggle="modal" data-target="#edit-main-name-modal">{{$ctrl.mainName?$ctrl.mainName:'MainName'}}</button>
           <div id="edit-main-name-modal" class="modal">
-            <div class="modal-content">
-              <div class="modal-header">Edit mainname</div>
-              <div class="modal-body">
-                <input id="main-name-input" type="text"
-                       ng-model="$ctrl.mainNameForEdit"
-                       ng-keyup="$event.keyCode==13&&$ctrl.updateMainName()">
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" ng-click="$ctrl.updateMainName()">OK</button>
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">Edit mainname</div>
+                <div class="modal-body">
+                  <input id="main-name-input" type="text"
+                         ng-model="$ctrl.mainNameForEdit"
+                         ng-keyup="$event.keyCode==13&&$ctrl.updateMainName()">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-primary" ng-click="$ctrl.updateMainName()">OK</button>
+                </div>
               </div>
             </div>
           </div>
@@ -244,16 +248,19 @@ angular.module(kModuleName)
                   ng-click="$ctrl.startEditDate()"
                   data-toggle="modal" data-target="#edit-date-modal">{{$ctrl.date?$ctrl.date:'Date'}}</button>
           <div id="edit-date-modal" class="modal">
-            <div class="modal-content">
-              <div class="modal-header">Edit date</div>
-              <div class="modal-body">
-                <input id="date-input"
-                       class="form-control datepicker"
-                       ng-model="$ctrl.dateForEdit">
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" ng-click="$ctrl.updateDate()">OK</button>
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">Edit date</div>
+                <div class="modal-body">
+                  <input id="date-input"
+                         type="text"
+                         class="form-control datepicker"
+                         value="$ctrl.date">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-primary" ng-click="$ctrl.updateDate()">OK</button>
+                </div>
               </div>
             </div>
           </div>
