@@ -59,7 +59,6 @@ class EditComponentController {
       this.date = getDateString(new Date())
       this.mainName = String(new Date().getTime())
     }
-    this.dateForEdit = this.date
 
     $('#edit-tag-modal').on('shown.bs.modal', function() {
       $('#tag-input').focus().select()
@@ -107,12 +106,11 @@ class EditComponentController {
   }
 
   startEditDate() {
-    this.dateForEdit = this.date
-    $('.datepicker').datepicker('update', this.dateForEdit)
+    $('.datepicker').datepicker('update', this.date)
   }
 
   updateDate() {
-    this.info.date = this.date = this.dateForEdit
+    this.info.date = this.date = $('#date-input').val()
     $('#edit-date-modal').modal('hide')
   }
 
