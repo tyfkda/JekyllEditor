@@ -29,7 +29,8 @@ angular.module(kModuleName)
     },
     template: `
 <div style="position: absolute; width: 100%; height: 100%;">
-  <textarea style="width: 100%; height: 100%; padding: 4px; border: 1px solid gray; border-radius: 6px 0 0 6px; resize: none;"
+  <textarea id="article-editor-textarea"
+            style="width: 100%; height: 100%; padding: 4px; border: 1px solid gray; border-radius: 6px 0 0 6px; resize: none;"
             ng-model="$ctrl.contents"
             ng-keyup="$ctrl.onKeyUp($event)"></textarea>
 </div>
@@ -193,15 +194,36 @@ class EditComponentController {
       })
   }
 
-  openModal() {
-    this._ChoosePostService.openModal()
-      .result.then(
-        result => {
-          console.log(`success: ${result}`)
-        },
-        result => {
-          console.log(`dismiss: ${result}`)
-        })
+  onClickLinkToPost() {
+    const textarea = $('#article-editor-textarea')
+    const ta = textarea[0]
+    if (ta && typeof(ta.selectionStart) != 'undefined' &&
+        typeof(ta.selectionEnd) != 'undefined' &&
+        ta.selectionStart < ta.selectionEnd) {
+      const val = textarea.val()
+      const start = ta.selectionStart, end = ta.selectionEnd
+      this._ChoosePostService.openModal()
+        .result.then(
+          post => {
+            let mainname = post.file
+            const ext = mainname.lastIndexOf('.')
+            if (ext >= 0)
+              mainname = mainname.substring(0, ext)
+
+            const text = val.substring(start, end)
+            const newText = `[${text}]({% post_url ${mainname} %})`
+            const e = document.createEvent('TextEvent')
+            e.initTextEvent('textInput', true, true, null, newText, 9, 'en-US')
+
+            ta.focus()
+            ta.setSelectionRange(start, end)
+            ta.dispatchEvent(e)
+            ta.setSelectionRange(start, start + newText.length)
+          },
+          result => {
+            textarea.focus()
+          })
+    }
   }
 }
 angular.module(kModuleName)
@@ -215,9 +237,7 @@ angular.module(kModuleName)
         <div style="position: absolute; left: 0; top: 0; right: 450px; bottom: 0;">
           <a class="btn btn-primary" href="#/">Back</a>
           <input type="text" ng-model="$ctrl.info.title" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
-
-    <button class="btn btn-warning" ng-click="$ctrl.openModal()">modal test</button>
-
+          <button class="btn btn-warning" ng-click="$ctrl.onClickLinkToPost()">Link to post</button>
        </div>
         <div class="clearfix" style="position: absolute; top: 0; right: 0px; width: 450px; height: 100%;">
           <button class="btn btn-danger pull-right" ng-click="$ctrl.delete()" ng-disabled="!$ctrl.originalFileName">Delete</button>
