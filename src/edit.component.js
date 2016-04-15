@@ -18,11 +18,20 @@ angular.module(kModuleName)
   .component('articleEditor', {
     bindings: {
       contents: '=',
+      onSaveRequested: '&',
+    },
+    controller: function() {
+      this.onKeyUp = function($event) {
+        const event = $event.originalEvent
+        if (event.keyCode == 83 && event.ctrlKey)  // Ctrl+S
+          this.onSaveRequested()
+      }
     },
     template: `
 <div style="position: absolute; width: 100%; height: 100%;">
   <textarea style="width: 100%; height: 100%; padding: 4px; border: 1px solid gray; border-radius: 6px 0 0 6px; resize: none;"
-            ng-model="$ctrl.contents"></textarea>
+            ng-model="$ctrl.contents"
+            ng-keyup="$ctrl.onKeyUp($event)"></textarea>
 </div>
       `})
 
@@ -269,7 +278,8 @@ angular.module(kModuleName)
       <div style="position: absolute; left: 0; top: 52px; right: 0; bottom: 0;">
         <div style="position: absolute; width: 50%; height: 100%; left: 0; top: 0;">
           <div style="position: absolute; left: 4px; top: 4px; right: 0; bottom: 4px;">
-            <article-editor contents="$ctrl.contents"></article-editor>
+            <article-editor contents="$ctrl.contents"
+                            on-save-requested="$ctrl.save()"></article-editor>
           </div>
         </div>
         <div style="position: absolute; width: 50%; height: 100%; right: 0; top: 0;">
