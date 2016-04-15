@@ -49,11 +49,12 @@ angular.module(kModuleName)
 
 // Edit component.
 class EditComponentController {
-  constructor($http, $location, $sce, $timeout) {
+  constructor($http, $location, $sce, $timeout, ChoosePostService) {
     this._$http = $http
     this._$location = $location
     this._$sce = $sce
     this._$timeout = $timeout
+    this._ChoosePostService = ChoosePostService
 
     this.info = {}
     if (this.originalFileName) {
@@ -191,10 +192,21 @@ class EditComponentController {
         console.error(response)
       })
   }
+
+  openModal() {
+    this._ChoosePostService.openModal()
+      .result.then(
+        result => {
+          console.log(`success: ${result}`)
+        },
+        result => {
+          console.log(`dismiss: ${result}`)
+        })
+  }
 }
 angular.module(kModuleName)
   .component('editComponent', {
-    controller: ['$http', '$location', '$sce', '$timeout', EditComponentController],
+    controller: ['$http', '$location', '$sce', '$timeout', 'ChoosePostService', EditComponentController],
     bindings: {
       originalFileName: '@',
     },
@@ -203,7 +215,10 @@ angular.module(kModuleName)
         <div style="position: absolute; left: 0; top: 0; right: 450px; bottom: 0;">
           <a class="btn btn-primary" href="#/">Back</a>
           <input type="text" ng-model="$ctrl.info.title" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
-        </div>
+
+    <button class="btn btn-warning" ng-click="$ctrl.openModal()">modal test</button>
+
+       </div>
         <div class="clearfix" style="position: absolute; top: 0; right: 0px; width: 450px; height: 100%;">
           <button class="btn btn-danger pull-right" ng-click="$ctrl.delete()" ng-disabled="!$ctrl.originalFileName">Delete</button>
           <button class="btn btn-success pull-right" ng-click="$ctrl.save()">Save</button>

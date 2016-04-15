@@ -1,5 +1,6 @@
 import kModuleName from './app_module_def'
 
+import './choose_post.service'
 import './edit.component'
 import './edit.page'
 import './new_post.page'
