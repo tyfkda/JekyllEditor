@@ -1,5 +1,5 @@
 const kModuleName = 'appMods'
 
-angular.module(kModuleName, [])
+angular.module(kModuleName, ['ui.bootstrap'])
 
 export default kModuleName
