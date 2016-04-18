@@ -13,6 +13,12 @@ function getDateString(date) {
   return `${year}-${month}-${day}`
 }
 
+function getTimeString(date) {
+  const hour = zeroPadding2(date.getHours())
+  const minute = zeroPadding2(date.getMinutes())
+  return `${hour}:${minute}`
+}
+
 // Article editor.
 angular.module(kModuleName)
   .component('articleEditor', {
@@ -58,6 +64,7 @@ class EditComponentController {
     this._ChoosePostService = ChoosePostService
 
     this.info = {}
+    this.time = '00:00'
     if (this.originalFileName) {
       this.fileName = this.originalFileName
       const m = this.fileName.match(/^(\d+-\d+-\d+)-(.*)\.(md|markdown)/)
@@ -80,6 +87,9 @@ class EditComponentController {
     $('#edit-date-modal').on('shown.bs.modal', function() {
       $('#date-input').focus().select()
     })
+    $('#edit-time-modal').on('shown.bs.modal', function() {
+      $('#time-input').focus().select()
+    })
 
     $timeout(() => {
       $('.datepicker').datepicker({
@@ -95,9 +105,13 @@ class EditComponentController {
         this.contents = response.data.contents
         this.setPreviewHtml(response.data.html)
         // Get date from front_matters
-        this.date = getDateString(new Date(this.info.date))
-        if ('tags' in this.info)
+        const date = new Date(this.info.date)
+        this.date = getDateString(date)
+        this.time = getTimeString(date)
+        if ('tags' in this.info && this.info.tags) {
+          console.log(this.info)
           this.tag = this.info.tags.join(', ')
+        }
       }, response => {
         console.error(response)
         if (response.status == 404) {  // Not Found
@@ -121,8 +135,13 @@ class EditComponentController {
   }
 
   updateDate() {
-    this.info.date = this.date = $('#date-input').val()
+    this.date = $('#date-input').val()
     $('#edit-date-modal').modal('hide')
+  }
+
+  updateTime() {
+    this.time = this.timeForEdit
+    $('#edit-time-modal').modal('hide')
   }
 
   setPreviewHtml(previewHtml) {
@@ -136,8 +155,9 @@ class EditComponentController {
 
   save() {
     let extension = 'md'
+    this.info.date = `${this.date} ${this.time}`
+    console.log(this.info.date)
     if (this.originalFileName == null) {  // New file.
-      this.info.date = this.date
       this.info.layout = Const.DEFAULT_LAYOUT
       this.info.categories = Const.DEFAULT_CATEGORIES
     } else {
@@ -234,12 +254,12 @@ angular.module(kModuleName)
     },
     template: `
       <div style="position: relative; height:52px; overflow: hidden;">
-        <div style="position: absolute; left: 0; top: 0; right: 450px; bottom: 0;">
+        <div style="position: absolute; left: 0; top: 0; right: 550px; bottom: 0;">
           <a class="btn btn-primary" href="#/">Back</a>
           <input type="text" ng-model="$ctrl.info.title" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
           <button class="btn btn-warning" ng-click="$ctrl.onClickLinkToPost()">Link to post</button>
        </div>
-        <div class="clearfix" style="position: absolute; top: 0; right: 0px; width: 450px; height: 100%;">
+        <div class="clearfix" style="position: absolute; top: 0; right: 0px; width: 550px; height: 100%;">
           <button class="btn btn-danger pull-right" ng-click="$ctrl.delete()" ng-disabled="!$ctrl.originalFileName">Delete</button>
           <button class="btn btn-success pull-right" ng-click="$ctrl.save()">Save</button>
 
@@ -282,6 +302,29 @@ angular.module(kModuleName)
                 <div class="modal-footer">
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                   <button type="button" class="btn btn-primary" ng-click="$ctrl.updateMainName()">OK</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- time -->
+          <button class="btn btn-normal pull-right"
+                  ng-click="$ctrl.timeForEdit=$ctrl.time"
+                  data-toggle="modal" data-target="#edit-time-modal">{{$ctrl.time?$ctrl.time:'Time'}}</button>
+          <div id="edit-time-modal" class="modal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">Edit time</div>
+                <div class="modal-body">
+                  <input id="time-input"
+                         type="text"
+                         class="form-control timepicker"
+                         ng-model="$ctrl.timeForEdit"
+                         ng-keyup="$event.keyCode==13&&$ctrl.updateTime()">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-primary" ng-click="$ctrl.updateTime()">OK</button>
                 </div>
               </div>
             </div>

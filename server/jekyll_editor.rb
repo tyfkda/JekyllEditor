@@ -80,6 +80,10 @@ def read_front_matters(posts, path)
   posts.map do |fn|
     h = read_jekyll_front_matter("#{path}/#{fn}")
     h['file'] = fn
+    if h['date'].is_a?(Date)
+      d = h['date']
+      h['date'] = Time.new(d.year, d.month, d.day)
+    end
     h
   end.sort_by! {|post| post['date']}.reverse!
 end

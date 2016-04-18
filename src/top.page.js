@@ -13,7 +13,12 @@ class TopPageController {
     this._$http({method: 'GET', url: `${Const.API}?action=list`})
       .then(response => {
         this.posts = response.data.posts
-        this.posts.forEach(post => post.date = new Date(post.date))
+        this.posts.forEach(post => {
+          post.date = new Date(post.date)
+          if (!('title' in post) || post.title.trim() == '') {
+            post.title = '(NO TITLE)'
+          }
+        })
       }, response => {
         console.error(response)
       })
