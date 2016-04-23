@@ -10,7 +10,7 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'jasmine'],
+    frameworks: ['jasmine'],
 
 
     // list of files / patterns to load in the browser
@@ -33,15 +33,27 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'test/**/*.js': ['browserify'],
-      'src/**/*.js': ['browserify'],
+      'test/**/*.js': ['webpack', 'sourcemap'],
+      'src/**/*.js': ['webpack', 'sourcemap'],
     },
 
-    browserify: {
-      transform: ['babelify'],
-
-      // don't forget to register the extensions
-      extensions: ['.js', '.jsx', '.coffee'],
+    webpack: {
+      devtool: 'inline-source-map',
+      module: {
+        loaders: [
+          {
+            test: /\.js$/,
+            loader: 'babel',
+            exclude: /node_modules/
+          }
+        ],
+        node: {
+          fs: 'empty'
+        }
+      }
+    },
+    webpackServer: {
+      quiet: true,
     },
 
     // test results reporter to use
