@@ -161,6 +161,12 @@ gulp.task('server', () => {
 
 // Unit test.
 const testFiles = [
+  'assets/lib/lodash.min.js',
+  'assets/lib/bind-polyfill.js',
+  'assets/lib/angular.min.js',
+  'assets/lib/angular-route.min.js',
+  'assets/lib/ui-bootstrap-tpls-1.3.2.min.js',
+  'node_modules/angular-mocks/angular-mocks.js',
   srcTestFiles,
 ]
 gulp.task('test', () => {
