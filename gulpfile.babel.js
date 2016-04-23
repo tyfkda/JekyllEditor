@@ -4,14 +4,10 @@ import gulp from 'gulp'
 const browserSync = require('browser-sync').create()
 
 // ES6
-import babelify from 'babelify'
-import browserify from 'browserify'
-import buffer from 'vinyl-buffer'
-import source from 'vinyl-source-stream'
-import sourcemaps from 'gulp-sourcemaps'
-import uglify from 'gulp-uglify'
+import clone from 'clone'
+import webpack from 'webpack-stream'
+import webpackConfig from './webpack.config.babel'
 import eslint from 'gulp-eslint'
-import babel from 'gulp-babel'
 
 // HTML
 import ejs from 'gulp-ejs'
@@ -56,18 +52,6 @@ const convertHtml = (buildTarget, dest) => {
     .pipe(browserSync.reload({stream: true}))
 }
 
-const buildEs6ForDebug = (glob) => {
-  return gulp.src(glob, {base: srcEs6Dir})
-    .pipe(plumber())
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(babel({
-      plugins: ['transform-es2015-modules-amd'],
-    }))
-    .pipe(sourcemaps.write('./'))
-    .pipe(gulp.dest(destJsDevDir))
-    .pipe(browserSync.reload({stream: true}))
-}
-
 const lint = (glob) => {
   return gulp.src(glob)
     .pipe(plumber())
@@ -101,12 +85,21 @@ gulp.task('watch-html', [], () => {
 })
 
 gulp.task('es6', () => {
-  return buildEs6ForDebug(srcEs6Files)
+  const config = clone(webpackConfig)
+  config.devtool = '#cheap-module-source-map'
+  return gulp.src(`${srcEs6Dir}/main.js`)
+    .pipe(webpack(config))
+    .pipe(gulp.dest(assetsDir))
 })
 
 gulp.task('watch-es6', [], () => {
-  return buildWhenModified(srcEs6Files,
-                           buildEs6ForDebug)
+  const config = clone(webpackConfig)
+  config.watch = true
+  config.devtool = '#cheap-module-source-map'
+  return gulp.src(srcEs6Files, {base: srcEs6Dir})
+    .pipe(webpack(config))
+    .pipe(gulp.dest(assetsDir))
+    .pipe(browserSync.reload({stream: true}))
 })
 
 gulp.task('lint', () => {
@@ -204,12 +197,11 @@ gulp.task('release', ['build'], () => {
   convertHtml('release', releaseDir)
 
   // Concatenate es6 into single 'assets/main.js' file.
-  browserify({entries: `${srcEs6Dir}/main.js`})
-    .transform(babelify)
-    .bundle()
-    .on('error', err => console.log('Error : ' + err.message))
-    .pipe(source('main.js'))
-    .pipe(buffer())
-    .pipe(uglify())
+  const webpackRaw = require('webpack')
+  const config = clone(webpackConfig)
+  config.plugins = config.plugin || []
+  config.plugins.push(new webpackRaw.optimize.UglifyJsPlugin())
+  gulp.src(`${srcEs6Dir}/main.js`)
+    .pipe(webpack(config))
     .pipe(gulp.dest(releaseAssetsDir))
 })

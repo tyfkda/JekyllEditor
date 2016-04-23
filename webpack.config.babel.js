@@ -1,5 +1,3 @@
-import webpack from 'webpack'
-
 module.exports = {
   context: __dirname + '/src',
   entry: './main.js',
@@ -15,7 +13,4 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    new webpack.optimize.UglifyJsPlugin(),
-  ],
 }
