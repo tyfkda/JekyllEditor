@@ -109,7 +109,6 @@ class EditComponentController {
         this.date = getDateString(date)
         this.time = getTimeString(date)
         if ('tags' in this.info && this.info.tags) {
-          console.log(this.info)
           this.tag = this.info.tags.join(', ')
         }
       }, response => {
@@ -156,7 +155,6 @@ class EditComponentController {
   save() {
     let extension = 'md'
     this.info.date = `${this.date} ${this.time}`
-    console.log(this.info.date)
     if (this.originalFileName == null) {  // New file.
       this.info.layout = Const.DEFAULT_LAYOUT
       this.info.categories = Const.DEFAULT_CATEGORIES
@@ -207,7 +205,6 @@ class EditComponentController {
       return
     this._$http({method: 'DELETE', url: `${Const.API}?action=post&file=${this.originalFileName}`})
       .then(response => {
-        console.log(response)
         this._$location.path('/')
       }, response => {
         console.error(response)
