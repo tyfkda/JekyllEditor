@@ -26,6 +26,7 @@
     "babelify": "^7.2.0",
     "browser-sync": "^2.9.10",
     "browserify": "^12.0.1",
+    "clone": "1.0.2",
     "gulp": "^3.9.0",
     "gulp-babel": "^6.1.1",
     "gulp-cssnano": "^2.1.0",
@@ -47,6 +48,7 @@
     "shelljs": "0.6.0",
     "through2": "^2.0.0",
     "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "webpack": "1.13.0"
   }
 }
