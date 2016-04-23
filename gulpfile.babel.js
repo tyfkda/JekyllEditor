@@ -96,7 +96,7 @@ gulp.task('watch-es6', [], () => {
   const config = clone(webpackConfig)
   config.watch = true
   config.devtool = '#cheap-module-source-map'
-  return gulp.src(srcEs6Files, {base: srcEs6Dir})
+  gulp.src(srcEs6Files, {base: srcEs6Dir})
     .pipe(webpack(config))
     .pipe(gulp.dest(assetsDir))
     .pipe(browserSync.reload({stream: true}))
