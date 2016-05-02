@@ -131,13 +131,13 @@ gulp.task('watch-sass', [], () => {
 })
 
 gulp.task('copy-res', () => {
-  return gulp.src([`assets/**/*.*`],
+  return gulp.src(['assets/**/*.*'],
                   {base: 'assets'})
     .pipe(gulp.dest(assetsDir))
 })
 
 const devServer = (_port) => {
-  shell.exec(`bundle exec ruby server/dev_server.rb`,
+  shell.exec('bundle exec ruby server/dev_server.rb',
              {async: true},
              () => {
                console.log('SERVER DONE')

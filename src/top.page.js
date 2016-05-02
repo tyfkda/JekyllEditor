@@ -70,5 +70,5 @@ angular.module(kModuleName)
     controller: ['$location', NewPostButtonController],
     template: `
       <a class="btn btn-success" href="#/new_post">New post</a>
-    `
+      `,
   })

@@ -204,7 +204,7 @@ class EditComponentController {
     if (!result)
       return
     this._$http({method: 'DELETE', url: `${Const.API}?action=post&file=${this.originalFileName}`})
-      .then(response => {
+      .then(_response => {
         this._$location.path('/')
       }, response => {
         console.error(response)
@@ -214,8 +214,8 @@ class EditComponentController {
   onClickLinkToPost() {
     const textarea = $('#article-editor-textarea')
     const ta = textarea[0]
-    if (ta && typeof(ta.selectionStart) != 'undefined' &&
-        typeof(ta.selectionEnd) != 'undefined' &&
+    if (ta && typeof ta.selectionStart != 'undefined' &&
+        typeof ta.selectionEnd != 'undefined' &&
         ta.selectionStart < ta.selectionEnd) {
       const val = textarea.val()
       const start = ta.selectionStart, end = ta.selectionEnd
@@ -237,7 +237,7 @@ class EditComponentController {
             ta.dispatchEvent(e)
             ta.setSelectionRange(start, start + newText.length)
           },
-          result => {
+          _result => {
             textarea.focus()
           })
     }
