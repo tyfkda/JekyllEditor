@@ -144,12 +144,15 @@ const devServer = (_port) => {
              })
 }
 
-gulp.task('server', () => {
-  const port = 4567
-  devServer(port)
+gulp.task('server', ['dev-server'], () => {
   browserSync.init({
     proxy: `localhost:${port}`,
   })
+})
+
+gulp.task('dev-server', () => {
+  const port = 4567
+  devServer(port)
 })
 
 // Unit test.

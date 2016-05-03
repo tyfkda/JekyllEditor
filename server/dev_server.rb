@@ -4,12 +4,15 @@ $LOAD_PATH.push(File.dirname(__FILE__))
 
 require 'sinatra/base'
 require 'sinatra/reloader'
+require 'sinatra/cross_origin'
 
 load 'jekyll_editor.rb'
 
 class SinatraDevServer < Sinatra::Base
   configure do
     register Sinatra::Reloader
+    register Sinatra::CrossOrigin
+    enable :cross_origin
   end
 
   set :public_folder, 'public'
