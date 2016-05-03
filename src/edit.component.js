@@ -1,6 +1,7 @@
 import kModuleName from './app_module_def'
 
 import Const from './const'
+import Util from './util/util'
 
 function zeroPadding2(n) {
   return _.padStart(String(n), 2, '0')
@@ -105,7 +106,7 @@ class EditComponentController {
         this.contents = response.data.contents
         this.setPreviewHtml(response.data.html)
         // Get date from front_matters
-        const date = new Date(this.info.date)
+        const date = Util.parseDate(this.info.date)
         this.date = getDateString(date)
         this.time = getTimeString(date)
         if ('tags' in this.info && this.info.tags) {

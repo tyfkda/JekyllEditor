@@ -1,6 +1,7 @@
 import kModuleName from './app_module_def'
 
 import Const from './const'
+import Util from './util/util'
 
 class TopPageController {
   constructor($http) {
@@ -14,7 +15,7 @@ class TopPageController {
       .then(response => {
         this.posts = response.data.posts
         this.posts.forEach(post => {
-          post.date = new Date(post.date)
+          post.date = Util.parseDate(post.date)
           if (!('title' in post) || post.title.trim() == '') {
             post.title = '(NO TITLE)'
           }
