@@ -13,9 +13,18 @@ class SinatraDevServer < Sinatra::Base
     register Sinatra::Reloader
     register Sinatra::CrossOrigin
     enable :cross_origin
+    set :allow_origin, :any
+    set :allow_methods, [:get, :put, :delete]
   end
 
   set :public_folder, 'public'
+
+  options '*' do
+    response.headers['Allow'] = 'HEAD,GET,PUT,POST,DELETE,OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept'
+    #response.headers['Access-Control-Allow-Origin'] = '*'
+    200
+  end
 
   get '/' do
     redirect './index.html'

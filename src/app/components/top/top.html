@@ -11,7 +11,7 @@
 </div>
 <ul *ngIf="posts&&posts.length!=0">
   <li *ngFor="let post of posts">
-    {{post.date | date:'yyyy/MM/dd'}} <a [href]="getPostUrl(post)">{{post.title}}</a>
+    {{post.date | date:'yyyy/MM/dd'}} <a [routerLink]="['/Edit', {post: post.file}]">{{post.title}}</a>
     <tag ng-repeat="tag in post.tags"><span class="label label-primary">{{tag}}</span></tag>
   </li>
 </ul>

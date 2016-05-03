@@ -1,30 +1,30 @@
 <div style="position: relative; height:52px; overflow: hidden;">
   <div style="position: absolute; left: 0; top: 0; right: 550px; bottom: 0;">
-    <a class="btn btn-primary" href="#/">Back</a>
-    <input type="text" ng-model="$ctrl.info.title" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
-    <button class="btn btn-warning" ng-click="$ctrl.onClickLinkToPost()">Link to post</button>
+    <a class="btn btn-primary" [routerLink]="['/Top']">Back</a>
+    <input type="text" [(ngModel)]="info.title" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
+    <button class="btn btn-warning" (click)="onClickLinkToPost()">Link to post</button>
   </div>
   <div class="clearfix" style="position: absolute; top: 0; right: 0px; width: 550px; height: 100%;">
-    <button class="btn btn-danger pull-right" ng-click="$ctrl.delete()" ng-disabled="!$ctrl.originalFileName">Delete</button>
-    <button class="btn btn-success pull-right" ng-click="$ctrl.save()">Save</button>
+    <button class="btn btn-danger pull-right" (click)="delete()" *ngIf="originalFileName">Delete</button>
+    <button class="btn btn-success pull-right" (click)="save()">Save</button>
 
     <!-- tag -->
     <button class="btn btn-normal pull-right"
             style="margin-right: 16px; width: 100px; overflow: hidden;"
-            ng-click="$ctrl.tagForEdit=$ctrl.tag"
-            data-toggle="modal" data-target="#edit-tag-modal">{{$ctrl.tag?$ctrl.tag:'tag'}}</button>
+            (click)="tagForEdit=tag"
+            data-toggle="modal" data-target="#edit-tag-modal">{{tag?tag:'tag'}}</button>
     <div id="edit-tag-modal" class="modal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">Edit tag</div>
           <div class="modal-body">
             <input id="tag-input" type="text"
-                   ng-model="$ctrl.tagForEdit"
-                   ng-keyup="$event.keyCode==13&&$ctrl.updateTag()">
+                   [(ngModel)]="tagForEdit"
+                   (keyup)="$event.keyCode==13&&updateTag()">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" ng-click="$ctrl.updateTag()">OK</button>
+            <button type="button" class="btn btn-primary" (click)="updateTag()">OK</button>
           </div>
         </div>
       </div>
@@ -33,20 +33,20 @@
     <!-- filename -->
     <button class="btn btn-normal pull-right"
             style="width: 100px; overflow: hidden;"
-            ng-click="$ctrl.mainNameForEdit=$ctrl.mainName"
-            data-toggle="modal" data-target="#edit-main-name-modal">{{$ctrl.mainName?$ctrl.mainName:'MainName'}}</button>
+            (click)="mainNameForEdit=mainName"
+            data-toggle="modal" data-target="#edit-main-name-modal">{{mainName?mainName:'MainName'}}</button>
     <div id="edit-main-name-modal" class="modal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">Edit mainname</div>
           <div class="modal-body">
             <input id="main-name-input" type="text"
-                   ng-model="$ctrl.mainNameForEdit"
-                   ng-keyup="$event.keyCode==13&&$ctrl.updateMainName()">
+                   [(ngModel)]="mainNameForEdit"
+                   (keyup)="$event.keyCode==13&&updateMainName()">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" ng-click="$ctrl.updateMainName()">OK</button>
+            <button type="button" class="btn btn-primary" (click)="updateMainName()">OK</button>
           </div>
         </div>
       </div>
@@ -54,8 +54,8 @@
 
     <!-- time -->
     <button class="btn btn-normal pull-right"
-            ng-click="$ctrl.timeForEdit=$ctrl.time"
-            data-toggle="modal" data-target="#edit-time-modal">{{$ctrl.time?$ctrl.time:'Time'}}</button>
+            (click)="timeForEdit=time"
+            data-toggle="modal" data-target="#edit-time-modal">{{time?time:'Time'}}</button>
     <div id="edit-time-modal" class="modal">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -64,12 +64,12 @@
             <input id="time-input"
                    type="text"
                    class="form-control timepicker"
-                   ng-model="$ctrl.timeForEdit"
-                   ng-keyup="$event.keyCode==13&&$ctrl.updateTime()">
+                   [(ngModel)]="timeForEdit"
+                   (keyup)="$event.keyCode==13&&updateTime()">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" ng-click="$ctrl.updateTime()">OK</button>
+            <button type="button" class="btn btn-primary" (click)="updateTime()">OK</button>
           </div>
         </div>
       </div>
@@ -77,8 +77,8 @@
 
     <!-- date -->
     <button class="btn btn-normal pull-right"
-            ng-click="$ctrl.startEditDate()"
-            data-toggle="modal" data-target="#edit-date-modal">{{$ctrl.date?$ctrl.date:'Date'}}</button>
+            (click)="startEditDate()"
+            data-toggle="modal" data-target="#edit-date-modal">{{date?date:'Date'}}</button>
     <div id="edit-date-modal" class="modal">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -87,11 +87,11 @@
             <input id="date-input"
                    type="text"
                    class="form-control datepicker"
-                   value="$ctrl.date">
+                   value="date">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" ng-click="$ctrl.updateDate()">OK</button>
+            <button type="button" class="btn btn-primary" (click)="updateDate()">OK</button>
           </div>
         </div>
       </div>
@@ -101,13 +101,13 @@
 <div style="position: absolute; left: 0; top: 52px; right: 0; bottom: 0;">
   <div style="position: absolute; width: 50%; height: 100%; left: 0; top: 0;">
     <div style="position: absolute; left: 4px; top: 4px; right: 0; bottom: 4px;">
-      <article-editor contents="$ctrl.contents"
-                      on-save-requested="$ctrl.save()"></article-editor>
+      <article-editor [params]="edit"
+                      (onSaveRequested)="save()"></article-editor>
     </div>
   </div>
   <div style="position: absolute; width: 50%; height: 100%; right: 0; top: 0;">
     <div style="position: absolute; left: 0; top: 4px; right: 4px; bottom: 4px; border: 1px solid gray; border-radius: 0 6px 6px 0;">
-      <previewer html="$ctrl.preview"></previewer>
+      <previewer [html]="preview"></previewer>
     </div>
   </div>
 </div>

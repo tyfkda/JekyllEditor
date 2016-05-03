@@ -1,15 +1,15 @@
 import {Component} from '@angular/core'
 import {HTTP_PROVIDERS, Http, Request, Response} from '@angular/http'
+import {ROUTER_DIRECTIVES} from '@angular/router-deprecated'
 
 import {Const} from '../../const'
 import {Util} from '../../util/util'
 
 @Component({
-  selector: 'top',
   templateUrl: 'app/components/top/top.html',
   styleUrls: ['app/components/top/top.css'],
   providers: [HTTP_PROVIDERS],
-  directives: [],
+  directives: [ROUTER_DIRECTIVES],
   pipes: []
 })
 export class Top {
@@ -23,19 +23,17 @@ export class Top {
   }
 
   refresh() {
-    this.http.request(new Request({
-      method: 'GET',
-      url: `${Const.API}?action=list`,
-    })).subscribe((response: Response) => {
-      const json = response.json()
-      this.posts = json.posts
-      this.posts.forEach(post => {
-        post.date = Util.parseDate(post.date)
-        if (!('title' in post) || post.title.trim() == '') {
-          post.title = '(NO TITLE)'
-        }
+    this.http.get(`${Const.API}?action=list`)
+      .subscribe((response: Response) => {
+        const json = response.json()
+        this.posts = json.posts
+        this.posts.forEach(post => {
+          post.date = Util.parseDate(post.date)
+          if (!('title' in post) || post.title.trim() == '') {
+            post.title = '(NO TITLE)'
+          }
+        })
       })
-    })
   }
 }
 

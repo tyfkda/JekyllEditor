@@ -1,7 +1,12 @@
-import kModuleName from './app_module_def'
+import {Component, Input} from '@angular/core'
+import {HTTP_PROVIDERS, Http, Request, Response} from '@angular/http'
+import {ROUTER_DIRECTIVES, Router} from '@angular/router-deprecated'
+import * as _ from 'lodash'
 
-import Const from './const'
-import Util from './util/util'
+import {ArticleEditor} from './article-editor'
+import {Const} from '../../const'
+import {Previewer} from './previewer'
+import {Util} from '../../util/util'
 
 function zeroPadding2(n) {
   return _.padStart(String(n), 2, '0')
@@ -20,52 +25,37 @@ function getTimeString(date) {
   return `${hour}:${minute}`
 }
 
-// Article editor.
-angular.module(kModuleName)
-  .component('articleEditor', {
-    bindings: {
-      contents: '=',
-      onSaveRequested: '&',
-    },
-    controller: function() {
-      this.onKeyUp = function($event) {
-        const event = $event.originalEvent
-        if (event.keyCode == 83 && event.ctrlKey)  // Ctrl+S
-          this.onSaveRequested()
-      }
-    },
-    template: `
-<div style="position: absolute; width: 100%; height: 100%;">
-  <textarea id="article-editor-textarea"
-            style="width: 100%; height: 100%; padding: 4px; border: 1px solid gray; border-radius: 6px 0 0 6px; resize: none;"
-            ng-model="$ctrl.contents"
-            ng-keyup="$ctrl.onKeyUp($event)"></textarea>
-</div>
-      `})
+@Component({
+  selector: 'edit-component',
+  templateUrl: 'app/components/edit/edit.component.html',
+  directives: [ROUTER_DIRECTIVES, ArticleEditor, Previewer],
+  providers: [HTTP_PROVIDERS],
+})
+export class EditComponent {
+  @Input() originalFileName: string
 
-// Previewer component.
-angular.module(kModuleName)
-  .component('previewer', {
-    bindings: {
-      html: '=',
-    },
-    template: `
-<div style="position: absolute; width: 100%; height: 100%; overflow-y: scroll; padding: 4px;"
-     ng-bind-html="$ctrl.html">
-</div>
-      `})
+  info: any
+  fileName: string
+  mainName: string
+  date: string
+  time: string
+  contents: string
+  tag: string
+  preview: string
 
-// Edit component.
-class EditComponentController {
-  constructor($http, $location, $sce, $timeout, ChoosePostService) {
-    this._$http = $http
-    this._$location = $location
-    this._$sce = $sce
-    this._$timeout = $timeout
-    this._ChoosePostService = ChoosePostService
+  mainNameForEdit: string
+  timeForEdit: string
+  tagForEdit: string
 
+  constructor(private http: Http, private router: Router) {
     this.info = {}
     this.time = '00:00'
+    this.edit = {
+      contents: null,
+    }
+  }
+
+  ngOnInit() {
     if (this.originalFileName) {
       this.fileName = this.originalFileName
       const m = this.fileName.match(/^(\d+-\d+-\d+)-(.*)\.(md|markdown)/)
@@ -92,19 +82,18 @@ class EditComponentController {
       $('#time-input').focus().select()
     })
 
-    $timeout(() => {
-      $('.datepicker').datepicker({
-        format: 'yyyy-mm-dd',
-      })
+    $('.datepicker').datepicker({
+      format: 'yyyy-mm-dd',
     })
   }
 
   requestContents() {
-    this._$http({method: 'GET', url: `${Const.API}?action=post&file=${this.originalFileName}`})
-      .then(response => {
-        this.info = response.data.info
-        this.contents = response.data.contents
-        this.setPreviewHtml(response.data.html)
+    this.http.get(`${Const.API}?action=post&file=${this.originalFileName}`)
+      .subscribe((response: Response) => {
+        const json = response.json()
+        this.info = json.info
+        this.edit.contents = json.contents
+        this.setPreviewHtml(json.html)
         // Get date from front_matters
         const date = Util.parseDate(this.info.date)
         this.date = getDateString(date)
@@ -112,10 +101,10 @@ class EditComponentController {
         if ('tags' in this.info && this.info.tags) {
           this.tag = this.info.tags.join(', ')
         }
-      }, response => {
+      }, (response: Response) => {
         console.error(response)
         if (response.status == 404) {  // Not Found
-          this._$location.path('/')
+          this.router.navigate(['/Top'])
         }
       })
   }
@@ -145,12 +134,11 @@ class EditComponentController {
   }
 
   setPreviewHtml(previewHtml) {
-    this.preview = this._$sce.trustAsHtml(previewHtml)
-
-    this._$timeout(() => {
+    this.preview = previewHtml
+    setTimeout(() => {
       MathJax.Hub.Queue(['Typeset', MathJax.Hub])
       $('previewer a').attr({target: '_blank'})
-    })
+    }, 0)
   }
 
   save() {
@@ -183,19 +171,16 @@ class EditComponentController {
         param.originalFileName = this.originalFileName
     }
     const url = `${Const.API}?${$.param(param)}`
-    this._$http({method: 'PUT', url,
-                 data: {
-                   info: this.info,
-                   contents: this.contents,
-                 },
-                })
-      .then(response => {
-        if (this.originalFileName !== response.data.file) {
+    const body = JSON.stringify({info: this.info, contents: this.edit.contents})
+    this.http.put(url, body)
+      .subscribe((response: Response) => {
+        const json = response.json()
+        if (this.originalFileName !== json.file) {
           // Redirect to edit page.
-          return this._$location.path(`edit/${response.data.file}`).replace()
+          return this.router.navigate(['/Edit', {post: json.file}])
         }
-        this.setPreviewHtml(response.data.html)
-      }, response => {
+        this.setPreviewHtml(json.html)
+      }, (response: Response) => {
         console.error(response)
       })
   }
@@ -204,15 +189,17 @@ class EditComponentController {
     const result = confirm('Delete this post?')
     if (!result)
       return
-    this._$http({method: 'DELETE', url: `${Const.API}?action=post&file=${this.originalFileName}`})
-      .then(_response => {
-        this._$location.path('/')
-      }, response => {
-        console.error(response)
+
+    this.http.delete(`${Const.API}?action=post&file=${this.originalFileName}`)
+      .subscribe((response: Response) => {
+        this.router.navigate(['/Top'])
+      }, (response: Response) => {
+         console.error(response)
       })
   }
 
   onClickLinkToPost() {
+    /*
     const textarea = $('#article-editor-textarea')
     const ta = textarea[0]
     if (ta && typeof ta.selectionStart != 'undefined' &&
@@ -242,13 +229,6 @@ class EditComponentController {
             textarea.focus()
           })
     }
+    */
   }
 }
-angular.module(kModuleName)
-  .component('editComponent', {
-    controller: ['$http', '$location', '$sce', '$timeout', 'ChoosePostService', EditComponentController],
-    bindings: {
-      originalFileName: '@',
-    },
-    template: require('./_edit.component.html'),
-  })
