@@ -1,0 +1,17 @@
+<h1>Posts</h1>
+<div>
+  <button class="btn btn-primary" ng-click="$ctrl.refresh()">Refresh</button>
+  <new-post-button></new-post-button>
+</div>
+<div ng-show="$ctrl.posts==null">
+  Loading...
+</div>
+<div ng-show="$ctrl.posts.length==0">
+  No posts
+</div>
+<ul ng-show="$ctrl.posts&&$ctrl.posts.length!=0">
+  <li ng-repeat="post in $ctrl.posts">
+    {{post.date | date:'yyyy/MM/dd'}} <a ng-href="{{$ctrl.getPostUrl(post)}}">{{post.title}}</a>
+    <tag ng-repeat="tag in post.tags"><span class="label label-primary">{{tag}}</span></tagn>
+</li>
+</ul>
