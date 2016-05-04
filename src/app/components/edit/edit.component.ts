@@ -1,3 +1,6 @@
+/// <reference path="../../../decl/mathjax.d.ts" />
+/// <reference path="../../../decl/jquery-modal.d.ts" />
+
 import {Component, Input} from '@angular/core'
 import {HTTP_PROVIDERS, Http, Request, Response} from '@angular/http'
 import {ROUTER_DIRECTIVES, Router} from '@angular/router-deprecated'
@@ -84,7 +87,7 @@ export class EditComponent {
     })
 
     $('.datepicker').datepicker({
-      format: 'yyyy-mm-dd',
+      dateFormat: 'yyyy-mm-dd',
     })
   }
 
@@ -160,7 +163,7 @@ export class EditComponent {
       this.info.tags = this.tag.split(/,\s*/).filter(t => t != '')
     }
 
-    const param = {
+    const param: any = {
       action: 'post',
       file: this.originalFileName,
     }
