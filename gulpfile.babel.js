@@ -1,6 +1,7 @@
 'use strict'
 
 import gulp from 'gulp'
+import rename from 'gulp-rename'
 const browserSync = require('browser-sync').create()
 
 // ES6
@@ -122,7 +123,7 @@ gulp.task('sass', () => {
     .pipe(plumber())
     .pipe(sass())
     .pipe(cssnano())
-    .pipe(gulp.dest(assetsDir))
+    .pipe(gulp.dest(`${SRC_DIR}/assets`))
     .pipe(browserSync.reload({stream: true}))
 })
 
@@ -144,12 +145,15 @@ const devServer = (_port) => {
              })
 }
 
-gulp.task('server', () => {
-  const port = 4567
-  devServer(port)
+gulp.task('server', ['dev-server'], () => {
   browserSync.init({
     proxy: `localhost:${port}`,
   })
+})
+
+gulp.task('dev-server', () => {
+  const port = 4567
+  devServer(port)
 })
 
 // Unit test.
@@ -183,7 +187,7 @@ gulp.task('clean', del.bind(null, [
   `${destJsDevDir}`,
 ]))
 
-gulp.task('release', ['build'], () => {
+gulp.task('release-old', ['build'], () => {
   // Copy resources.
   gulp.src([`${destDir}/**/*.*`,
             `!${destDir}/index.html`,
@@ -204,4 +208,33 @@ gulp.task('release', ['build'], () => {
   gulp.src(`${srcEs6Dir}/main.js`)
     .pipe(webpack(config))
     .pipe(gulp.dest(releaseAssetsDir))
+})
+
+const SRC_DIR = './src'
+const DIST_DIR = './dist'
+const SERVER_DIR = './server'
+
+gulp.task('release', () => {
+  gulp.src([`${SRC_DIR}/**/*.*`,
+            `!${SRC_DIR}/assets/**/*`,
+            '!/**/*.js',
+            '!/**/*.ts',
+           ],
+           {base: SRC_DIR})
+    .pipe(gulp.dest(DIST_DIR))
+
+  gulp.src([`${SRC_DIR}/assets/**/*`],
+           {base: SRC_DIR})
+    .pipe(gulp.dest(DIST_DIR))
+
+  gulp.src([`${SRC_DIR}/config.release.js`,
+           ],
+           {base: SRC_DIR})
+    .pipe(rename('config.js'))
+    .pipe(gulp.dest(DIST_DIR))
+
+  gulp.src([`${SERVER_DIR}/**/*`,
+            `!${SERVER_DIR}/,config.example.rb`],
+           {base: SERVER_DIR})
+    .pipe(gulp.dest(DIST_DIR))
 })

@@ -1,0 +1,19 @@
+<h1>Posts</h1>
+<div>
+  <button class="btn btn-primary" (click)="refresh()">Refresh</button>
+  <new-post-button></new-post-button>
+</div>
+<div *ngIf="posts==null">
+  Loading...
+</div>
+<div *ngIf="posts&&posts.length==0">
+  No posts
+</div>
+<ul *ngIf="posts&&posts.length!=0">
+  <li *ngFor="let post of posts">
+    {{post.date | date:'yyyy/MM/dd'}} <a [routerLink]="['/Edit', {post: post.file}]">{{post.title}}</a>
+    <tag *ngFor="let tag of post.tags">
+      <span class="label label-primary">{{tag}}</span>
+    </tag>
+  </li>
+</ul>

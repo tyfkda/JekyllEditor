@@ -1,12 +1,17 @@
 /server/,config.rb
+/src/assets/default.css
 
 # Node
 /node_modules
 /npm-debug.log
 
+# Typings
+/typings/
+
 # Generated files
 /public
 /release
+/dist
 
 # Xcode Workspace
 *.xcworkspace/*

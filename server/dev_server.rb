@@ -4,15 +4,27 @@ $LOAD_PATH.push(File.dirname(__FILE__))
 
 require 'sinatra/base'
 require 'sinatra/reloader'
+require 'sinatra/cross_origin'
 
 load 'jekyll_editor.rb'
 
 class SinatraDevServer < Sinatra::Base
   configure do
     register Sinatra::Reloader
+    register Sinatra::CrossOrigin
+    enable :cross_origin
+    set :allow_origin, :any
+    set :allow_methods, [:get, :put, :delete]
   end
 
   set :public_folder, 'public'
+
+  options '*' do
+    response.headers['Allow'] = 'HEAD,GET,PUT,POST,DELETE,OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Cache-Control, Accept'
+    #response.headers['Access-Control-Allow-Origin'] = '*'
+    200
+  end
 
   get '/' do
     redirect './index.html'
