@@ -31,4 +31,6 @@ import * as _ from 'lodash'
 
 import * as _ from 'lodash'
 
-/// <reference path="./config.d.ts" />
+/// <reference path="./decl/mathjax.d.ts" />
+/// <reference path="./decl/jquery-modal.d.ts" />
+/// <reference path="./decl/config.d.ts" />

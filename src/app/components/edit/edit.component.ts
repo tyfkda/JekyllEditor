@@ -1,6 +1,3 @@
-/// <reference path="../../../decl/mathjax.d.ts" />
-/// <reference path="../../../decl/jquery-modal.d.ts" />
-
 import {Component, Input, ViewChild} from '@angular/core'
 import {HTTP_PROVIDERS, Http, Request, Response} from '@angular/http'
 import {ROUTER_DIRECTIVES, Router} from '@angular/router-deprecated'
