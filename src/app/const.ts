@@ -1,5 +1,5 @@
 export const Const = {
-  API: '//localhost:4567/api.rb',
+  API: Config.isDebug ? '//localhost:4567/api.rb' : 'api.rb',
 
   DEFAULT_CATEGORIES: ['blog'],
   DEFAULT_LAYOUT: 'post',

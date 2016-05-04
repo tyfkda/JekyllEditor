@@ -4,9 +4,12 @@ import {provide, enableProdMode} from '@angular/core';
 import {HTTP_PROVIDERS} from '@angular/http';
 import {ROUTER_PROVIDERS} from '@angular/router-deprecated';
 
+import {Const} from './app/const';
 import {SeedApp} from './app/seed-app';
 
-// enableProdMode()
+if (!Config.isDebug) {
+  enableProdMode()
+}
 
 bootstrap(SeedApp, [
   HTTP_PROVIDERS,
