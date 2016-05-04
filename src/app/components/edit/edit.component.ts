@@ -1,7 +1,7 @@
 /// <reference path="../../../decl/mathjax.d.ts" />
 /// <reference path="../../../decl/jquery-modal.d.ts" />
 
-import {Component, Input} from '@angular/core'
+import {Component, Input, ViewChild} from '@angular/core'
 import {HTTP_PROVIDERS, Http, Request, Response} from '@angular/http'
 import {ROUTER_DIRECTIVES, Router} from '@angular/router-deprecated'
 import * as _ from 'lodash'
@@ -9,6 +9,7 @@ import * as _ from 'lodash'
 import {ArticleEditor} from './article-editor'
 import {Const} from '../../const'
 import {Previewer} from './previewer'
+import {ChoosePost} from './choose_post.ts'
 import {Util} from '../../util/util'
 
 function zeroPadding2(n) {
@@ -31,11 +32,12 @@ function getTimeString(date) {
 @Component({
   selector: 'edit-component',
   templateUrl: 'app/components/edit/edit.component.html',
-  directives: [ROUTER_DIRECTIVES, ArticleEditor, Previewer],
+  directives: [ROUTER_DIRECTIVES, ArticleEditor, Previewer, ChoosePost],
   providers: [HTTP_PROVIDERS],
 })
 export class EditComponent {
   @Input() originalFileName: string
+  @ViewChild(ChoosePost) choosePost: ChoosePost
 
   info: any
   fileName: string
@@ -202,37 +204,41 @@ export class EditComponent {
       })
   }
 
-  onClickLinkToPost() {
-    /*
+  isTextSelected(post) {
     const textarea = $('#article-editor-textarea')
-    const ta = textarea[0]
+    const ta: any = textarea[0]
+    return (ta && typeof ta.selectionStart != 'undefined' &&
+            typeof ta.selectionEnd != 'undefined' &&
+            ta.selectionStart < ta.selectionEnd)
+  }
+
+  onPostChoosed(post) {
+    const textarea = $('#article-editor-textarea')
+    const ta: any = textarea[0]
     if (ta && typeof ta.selectionStart != 'undefined' &&
         typeof ta.selectionEnd != 'undefined' &&
         ta.selectionStart < ta.selectionEnd) {
       const val = textarea.val()
       const start = ta.selectionStart, end = ta.selectionEnd
-      this._ChoosePostService.openModal()
-        .result.then(
-          post => {
-            let mainname = post.file
-            const ext = mainname.lastIndexOf('.')
-            if (ext >= 0)
-              mainname = mainname.substring(0, ext)
+      let mainname = post.file
+      const ext = mainname.lastIndexOf('.')
+      if (ext >= 0)
+        mainname = mainname.substring(0, ext)
 
-            const text = val.substring(start, end)
-            const newText = `[${text}]({% post_url ${mainname} %})`
-            const e = document.createEvent('TextEvent')
-            e.initTextEvent('textInput', true, true, null, newText, 9, 'en-US')
+      const text = val.substring(start, end)
+      const newText = `[${text}]({% post_url ${mainname} %})`
+      const e = document.createEvent('TextEvent')
+      e.initTextEvent('textInput', true, true, null, newText, 9, 'en-US')
 
-            ta.focus()
-            ta.setSelectionRange(start, end)
-            ta.dispatchEvent(e)
-            ta.setSelectionRange(start, start + newText.length)
-          },
-          _result => {
-            textarea.focus()
-          })
+      ta.focus()
+      ta.setSelectionRange(start, end)
+      ta.dispatchEvent(e)
+      ta.setSelectionRange(start, start + newText.length)
     }
-    */
+  }
+
+  onPostCanceled() {
+    const textarea = $('#article-editor-textarea')
+    textarea.focus()
   }
 }

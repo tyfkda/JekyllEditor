@@ -2,7 +2,11 @@
   <div style="position: absolute; left: 0; top: 0; right: 550px; bottom: 0;">
     <a class="btn btn-primary" [routerLink]="['/Top']">Back</a>
     <input type="text" [(ngModel)]="info.title" style="font-size: 1.5em; width: 50%; margin: 4px; padding: 4px; border: 1px solid gray; border-radius: 6px;">
-    <button class="btn btn-warning" (click)="onClickLinkToPost()">Link to post</button>
+    <button class="btn btn-warning"
+            (click)="choosePost.open()">Link to post</button>
+    <choose-post #choosePost
+                 (onSelect)="onPostChoosed($event)"
+                 (onCancel)="onPostCanceled()"></choose-post>
   </div>
   <div class="clearfix" style="position: absolute; top: 0; right: 0px; width: 550px; height: 100%;">
     <button class="btn btn-danger pull-right" (click)="delete()" *ngIf="originalFileName">Delete</button>

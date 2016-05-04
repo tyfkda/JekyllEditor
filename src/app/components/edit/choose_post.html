@@ -1,0 +1,17 @@
+<modal>
+  <modal-header [show-close]="true">
+    <h3 class="modal-title">Choose post to link</h3>
+  </modal-header>
+  <modal-body>
+    <ul>
+      <li *ngFor="let post of posts">
+        {{post.date | date:'yyyy/MM/dd'}}
+        <button (click)="onPostClicked(post)">{{post.title}}</button>
+      </li>
+    </ul>
+  </modal-body>
+  <modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal"
+            (click)="onPostCanceled()">Cancel</button>
+  </modal-footer>
+</modal>
