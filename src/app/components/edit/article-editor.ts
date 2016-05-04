@@ -10,6 +10,6 @@ export class ArticleEditor {
 
   onKeyUp(event) {
     if (event.keyCode == 83 && event.ctrlKey)  // Ctrl+S
-      this.onSaveRequested.emit()
+      this.onSaveRequested.emit(null)
   }
 }

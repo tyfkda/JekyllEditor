@@ -46,6 +46,7 @@ export class EditComponent {
   mainNameForEdit: string
   timeForEdit: string
   tagForEdit: string
+  edit: any
 
   constructor(private http: Http, private router: Router) {
     this.info = {}
@@ -156,7 +157,7 @@ export class EditComponent {
     if (!this.info.title)
       this.info.title = 'NO TITLE'
     if (this.tag) {
-      this.info.tags = this.tag.split(/,\s*/).filter(t => t)
+      this.info.tags = this.tag.split(/,\s*/).filter(t => t != '')
     }
 
     const param = {
