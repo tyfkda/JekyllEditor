@@ -5,14 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start-old": "gulp",
-    "build": "gulp build",
+    "build-old": "gulp build",
     "watch": "gulp watch",
     "server-old": "gulp server",
     "test": "gulp test",
     "release": "gulp release",
     "clean": "gulp clean",
     "server": "webpack-dev-server --inline --colors --progress --display-error-details --display-cached --port 3000  --content-base src",
-    "start": "npm run server"
+    "start": "npm run server",
+    "build": "webpack --inline --colors --progress --display-error-details --display-cached"
   },
   "author": "tyfkda",
   "repository": {
