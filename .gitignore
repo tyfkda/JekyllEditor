@@ -1,4 +1,5 @@
 /server/,config.rb
+/src/assets/default.css
 
 # Node
 /node_modules

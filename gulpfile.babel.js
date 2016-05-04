@@ -123,7 +123,7 @@ gulp.task('sass', () => {
     .pipe(plumber())
     .pipe(sass())
     .pipe(cssnano())
-    .pipe(gulp.dest(assetsDir))
+    .pipe(gulp.dest(`${SRC_DIR}/assets`))
     .pipe(browserSync.reload({stream: true}))
 })
 

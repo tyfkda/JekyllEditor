@@ -1,9 +1,13 @@
+@import 'syntax-highlighting';
+
+$BG_COLOR: #ddd;
+
 html, body {
   height: 100%;
 }
 
 body {
-  background-color: #ddd;
+  background-color: $BG_COLOR;
   font-family: "Helvetica Neue", Helvetica, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
 }
 
