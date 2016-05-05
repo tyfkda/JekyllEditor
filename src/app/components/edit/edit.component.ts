@@ -6,7 +6,7 @@ import * as _ from 'lodash'
 import {ArticleEditor} from './article-editor'
 import {Const} from '../../const'
 import {Previewer} from './previewer'
-import {ChoosePost} from './choose_post.ts'
+import {ChoosePostModal} from './choose_post_modal.ts'
 import {Util} from '../../util/util'
 
 function zeroPadding2(n) {
@@ -29,12 +29,11 @@ function getTimeString(date) {
 @Component({
   selector: 'edit-component',
   template: require('./edit.component.html'),
-  directives: [ROUTER_DIRECTIVES, ArticleEditor, Previewer, ChoosePost],
+  directives: [ROUTER_DIRECTIVES, ArticleEditor, Previewer, ChoosePostModal],
   providers: [HTTP_PROVIDERS],
 })
 export class EditComponent {
   @Input() originalFileName: string
-  @ViewChild(ChoosePost) choosePost: ChoosePost
 
   info: any
   fileName: string

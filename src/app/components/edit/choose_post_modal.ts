@@ -6,12 +6,12 @@ import {MODAL_DIRECTIVES, ModalComponent} from '../../../ng2-bs3-modal/ng2-bs3-m
 import {Util} from '../../util/util'
 
 @Component({
-  selector: 'choose-post',
-  template: require('./choose_post.html'),
+  selector: 'choose-post-modal',
+  template: require('./choose_post_modal.html'),
   directives: [MODAL_DIRECTIVES],
   providers: [HTTP_PROVIDERS],
 })
-export class ChoosePost {
+export class ChoosePostModal {
   @ViewChild(ModalComponent) modal: ModalComponent
   @Output() onSelect = new EventEmitter()
   @Output() onCancel = new EventEmitter()
