@@ -4,9 +4,10 @@ import {ROUTER_DIRECTIVES, Router} from '@angular/router-deprecated'
 import * as _ from 'lodash'
 
 import {ArticleEditor} from './article-editor'
-import {Const} from '../../const'
-import {Previewer} from './previewer'
 import {ChoosePostModal} from './choose_post_modal.ts'
+import {Const} from '../../const'
+import {ModalButton} from './modal_button'
+import {Previewer} from './previewer'
 import {Util} from '../../util/util'
 
 function zeroPadding2(n) {
@@ -29,7 +30,7 @@ function getTimeString(date) {
 @Component({
   selector: 'edit-component',
   template: require('./edit.component.html'),
-  directives: [ROUTER_DIRECTIVES, ArticleEditor, Previewer, ChoosePostModal],
+  directives: [ROUTER_DIRECTIVES, ArticleEditor, Previewer, ChoosePostModal, ModalButton],
   providers: [HTTP_PROVIDERS],
 })
 export class EditComponent {
@@ -44,9 +45,7 @@ export class EditComponent {
   tag: string
   preview: string
 
-  mainNameForEdit: string
   timeForEdit: string
-  tagForEdit: string
   edit: any
 
   constructor(private http: Http, private router: Router) {
@@ -111,16 +110,6 @@ export class EditComponent {
       })
   }
 
-  updateTag() {
-    this.tag = this.tagForEdit
-    $('#edit-tag-modal').modal('hide')
-  }
-
-  updateMainName() {
-    this.mainName = this.mainNameForEdit
-    $('#edit-main-name-modal').modal('hide')
-  }
-
   startEditDate() {
     $('.datepicker').datepicker('update', this.date)
   }
@@ -128,11 +117,6 @@ export class EditComponent {
   updateDate() {
     this.date = $('#date-input').val()
     $('#edit-date-modal').modal('hide')
-  }
-
-  updateTime() {
-    this.time = this.timeForEdit
-    $('#edit-time-modal').modal('hide')
   }
 
   setPreviewHtml(previewHtml) {

@@ -1,0 +1,17 @@
+<button class="btn btn-normal pull-right"
+        style="overflow: hidden;"
+        [style.width]="width"
+        (click)="valueForEdit=value;editModal.open()">{{value?value:placeHolder}}</button>
+
+<modal #editModal>
+  <modal-header [show-close]="true">
+    <h3 class="modal-title">{{title}}</h3>
+  </modal-header>
+  <modal-body>
+    <input id="tag-input" type="text" autofocus
+           [(ngModel)]="valueForEdit"
+           (keyup)="$event.keyCode==13&&editModal.close()">
+  </modal-body>
+  <modal-footer [show-default-buttons]="true">
+  </modal-footer>
+</modal>

@@ -12,72 +12,9 @@
     <button class="btn btn-danger pull-right" (click)="delete()" *ngIf="originalFileName">Delete</button>
     <button class="btn btn-success pull-right" (click)="save()">Save</button>
 
-    <!-- tag -->
-    <button class="btn btn-normal pull-right"
-            style="margin-right: 16px; width: 100px; overflow: hidden;"
-            (click)="tagForEdit=tag"
-            data-toggle="modal" data-target="#edit-tag-modal">{{tag?tag:'tag'}}</button>
-    <div id="edit-tag-modal" class="modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">Edit tag</div>
-          <div class="modal-body">
-            <input id="tag-input" type="text"
-                   [(ngModel)]="tagForEdit"
-                   (keyup)="$event.keyCode==13&&updateTag()">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" (click)="updateTag()">OK</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- filename -->
-    <button class="btn btn-normal pull-right"
-            style="width: 100px; overflow: hidden;"
-            (click)="mainNameForEdit=mainName"
-            data-toggle="modal" data-target="#edit-main-name-modal">{{mainName?mainName:'MainName'}}</button>
-    <div id="edit-main-name-modal" class="modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">Edit mainname</div>
-          <div class="modal-body">
-            <input id="main-name-input" type="text"
-                   [(ngModel)]="mainNameForEdit"
-                   (keyup)="$event.keyCode==13&&updateMainName()">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" (click)="updateMainName()">OK</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- time -->
-    <button class="btn btn-normal pull-right"
-            (click)="timeForEdit=time"
-            data-toggle="modal" data-target="#edit-time-modal">{{time?time:'Time'}}</button>
-    <div id="edit-time-modal" class="modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">Edit time</div>
-          <div class="modal-body">
-            <input id="time-input"
-                   type="text"
-                   class="form-control timepicker"
-                   [(ngModel)]="timeForEdit"
-                   (keyup)="$event.keyCode==13&&updateTime()">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="button" class="btn btn-primary" (click)="updateTime()">OK</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <modal-button [title]="'Edit tag'" [placeHolder]="'tag'" [(value)]="tag"></modal-button>
+    <modal-button [title]="'Edit main-name'" [placeHolder]="'mainname'" [(value)]="mainName"></modal-button>
+    <modal-button [title]="'Edit time'" [placeHolder]="'time'" [(value)]="time"></modal-button>
 
     <!-- date -->
     <button class="btn btn-normal pull-right"
