@@ -3,6 +3,7 @@ import {HTTP_PROVIDERS, Http, Request, Response} from '@angular/http'
 
 import {Const} from '../../const'
 import {MODAL_DIRECTIVES, ModalComponent} from '../../../ng2-bs3-modal/ng2-bs3-modal'
+import {Util} from '../../util/util'
 
 @Component({
   selector: 'choose-post',
@@ -25,7 +26,7 @@ export class ChoosePost {
       .subscribe((response: Response) => {
         const json = response.json()
         this.posts = json.posts
-        this.posts.forEach(post => post.date = new Date(post.date))
+        this.posts.forEach(post => post.date = Util.parseDate(post.date))
         this.modal.open()
       }/*, response => {
         this._$uibModal.dismiss(response)
