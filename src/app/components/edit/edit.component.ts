@@ -85,8 +85,8 @@ export class EditComponent {
       $('#time-input').focus().select()
     })
 
-    $('.datepicker').datepicker({
-      dateFormat: 'yyyy-mm-dd',
+    $('.datepicker').datepicker(<JQueryUI.DatepickerOptions>{
+      format: Const.DATE_FORMAT,
     })
   }
 

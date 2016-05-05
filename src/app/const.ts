@@ -3,4 +3,5 @@ export const Const = {
 
   DEFAULT_CATEGORIES: ['blog'],
   DEFAULT_LAYOUT: 'post',
+  DATE_FORMAT: 'yyyy-mm-dd',
 }
