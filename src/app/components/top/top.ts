@@ -7,8 +7,7 @@ import {Util} from '../../util/util'
 import {NewPostButton} from './new_post_button'
 
 @Component({
-  templateUrl: 'app/components/top/top.html',
-  styleUrls: ['app/components/top/top.css'],
+  template: require('./top.html'),
   providers: [HTTP_PROVIDERS],
   directives: [ROUTER_DIRECTIVES, NewPostButton],
   pipes: []

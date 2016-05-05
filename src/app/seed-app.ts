@@ -10,7 +10,7 @@ import {NewPost} from './components/new_post/new_post'
   providers: [],
   pipes: [],
   directives: [ROUTER_DIRECTIVES],
-  templateUrl: 'app/seed-app.html',
+  template: require('./seed-app.html'),
 })
 @RouteConfig([
   { path: '/top', component: Top, name: 'Top', useAsDefault: true },

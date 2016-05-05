@@ -215,10 +215,7 @@ const DIST_DIR = './dist'
 const SERVER_DIR = './server'
 
 gulp.task('release', () => {
-  gulp.src([`${SRC_DIR}/**/*.*`,
-            `!${SRC_DIR}/assets/**/*`,
-            '!/**/*.js',
-            '!/**/*.ts',
+  gulp.src([`${SRC_DIR}/index.html`,
            ],
            {base: SRC_DIR})
     .pipe(gulp.dest(DIST_DIR))

@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core'
 
 @Component({
   selector: 'previewer',
-  templateUrl: 'app/components/edit/previewer.html',
+  template: require('./previewer.html'),
   directives: [],
 })
 export class Previewer {

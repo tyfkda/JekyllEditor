@@ -28,7 +28,7 @@ function getTimeString(date) {
 
 @Component({
   selector: 'edit-component',
-  templateUrl: 'app/components/edit/edit.component.html',
+  template: require('./edit.component.html'),
   directives: [ROUTER_DIRECTIVES, ArticleEditor, Previewer, ChoosePost],
   providers: [HTTP_PROVIDERS],
 })

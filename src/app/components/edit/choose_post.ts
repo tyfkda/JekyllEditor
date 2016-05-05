@@ -6,7 +6,7 @@ import {MODAL_DIRECTIVES, ModalComponent} from '../../../ng2-bs3-modal/ng2-bs3-m
 
 @Component({
   selector: 'choose-post',
-  templateUrl: 'app/components/edit/choose_post.html',
+  template: require('./choose_post.html'),
   directives: [MODAL_DIRECTIVES],
   providers: [HTTP_PROVIDERS],
 })
