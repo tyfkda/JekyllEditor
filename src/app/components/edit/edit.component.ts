@@ -6,6 +6,7 @@ import * as _ from 'lodash'
 import {ArticleEditor} from './article-editor'
 import {ChoosePostModal} from './choose_post_modal.ts'
 import {Const} from '../../const'
+import {DateButton} from './date_button'
 import {ModalButton} from './modal_button'
 import {Previewer} from './previewer'
 import {Util} from '../../util/util'
@@ -30,7 +31,8 @@ function getTimeString(date) {
 @Component({
   selector: 'edit-component',
   template: require('./edit.component.html'),
-  directives: [ROUTER_DIRECTIVES, ArticleEditor, Previewer, ChoosePostModal, ModalButton],
+  directives: [ROUTER_DIRECTIVES, ArticleEditor, Previewer, ChoosePostModal,
+               ModalButton, DateButton],
   providers: [HTTP_PROVIDERS],
 })
 export class EditComponent {
@@ -108,15 +110,6 @@ export class EditComponent {
           this.router.navigate(['/Top'])
         }
       })
-  }
-
-  startEditDate() {
-    $('.datepicker').datepicker('update', this.date)
-  }
-
-  updateDate() {
-    this.date = $('#date-input').val()
-    $('#edit-date-modal').modal('hide')
   }
 
   setPreviewHtml(previewHtml) {
