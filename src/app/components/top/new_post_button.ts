@@ -1,9 +1,9 @@
 import {Component} from '@angular/core'
-import {ROUTER_DIRECTIVES} from '@angular/router-deprecated'
+import {ROUTER_DIRECTIVES} from '@angular/router'
 
 @Component({
   selector: 'new-post-button',
-  template: '<a class="btn btn-success" [routerLink]="[\'/NewPost\']">New post</a>',
+  template: '<a class="btn btn-success" [routerLink]="[\'/new_post\']">New post</a>',
   directives: [ROUTER_DIRECTIVES],
   pipes: []
 })

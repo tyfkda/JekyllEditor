@@ -1,6 +1,6 @@
 import {Component, Input, ViewChild} from '@angular/core'
 import {HTTP_PROVIDERS, Http, Request, Response} from '@angular/http'
-import {ROUTER_DIRECTIVES, Router} from '@angular/router-deprecated'
+import {ROUTER_DIRECTIVES, Router} from '@angular/router'
 import * as _ from 'lodash'
 
 import {ArticleEditor} from './article-editor'
@@ -107,7 +107,7 @@ export class EditComponent {
       }, (response: Response) => {
         console.error(response)
         if (response.status == 404) {  // Not Found
-          this.router.navigate(['/Top'])
+          this.router.navigate(['/'])
         }
       })
   }
@@ -156,7 +156,7 @@ export class EditComponent {
         const json = response.json()
         if (this.originalFileName !== json.file) {
           // Redirect to edit page.
-          return this.router.navigate(['/Edit', {post: json.file}])
+          return this.router.navigate(['/edit', json.file])
         }
         this.setPreviewHtml(json.html)
       }, (response: Response) => {
@@ -171,7 +171,7 @@ export class EditComponent {
 
     this.http.delete(`${Const.API}?action=post&file=${this.originalFileName}`)
       .subscribe((response: Response) => {
-        this.router.navigate(['/Top'])
+        this.router.navigate(['/'])
       }, (response: Response) => {
          console.error(response)
       })

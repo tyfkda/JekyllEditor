@@ -1,5 +1,5 @@
 import {Component} from '@angular/core'
-import {RouteParams} from '@angular/router-deprecated'
+import {RouteSegment} from '@angular/router'
 
 import {EditComponent} from './edit.component'
 
@@ -10,7 +10,7 @@ import {EditComponent} from './edit.component'
 export class Edit {
   private file: string
 
-  constructor(routeParams: RouteParams) {
-    this.file = routeParams.get('post')
+  constructor(segment: RouteSegment) {
+    this.file = segment.getParam('post')
   }
 }

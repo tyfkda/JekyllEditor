@@ -1,6 +1,6 @@
 import {Component} from '@angular/core'
 import {HTTP_PROVIDERS, Http, Request, Response} from '@angular/http'
-import {ROUTER_DIRECTIVES} from '@angular/router-deprecated'
+import {ROUTER_DIRECTIVES} from '@angular/router'
 
 import {Const} from '../../const'
 import {Util} from '../../util/util'
