@@ -2,7 +2,7 @@ import {Component, Output, ViewChild, EventEmitter} from '@angular/core'
 import {HTTP_PROVIDERS, Http, Request, Response} from '@angular/http'
 
 import {Const} from '../../const'
-import {MODAL_DIRECTIVES, ModalComponent} from '../../../ng2-bs3-modal/ng2-bs3-modal'
+import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
 import {Util} from '../../util/util'
 
 @Component({

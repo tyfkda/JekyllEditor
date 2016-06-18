@@ -7,7 +7,7 @@
 import {Component, Input, Output, EventEmitter, ViewChild} from '@angular/core'
 
 import {Const} from '../../const'
-import {MODAL_DIRECTIVES, ModalComponent} from '../../../ng2-bs3-modal/ng2-bs3-modal'
+import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
 
 @Component({
   selector: 'date-button',
