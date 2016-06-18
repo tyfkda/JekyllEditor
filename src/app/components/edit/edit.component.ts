@@ -136,6 +136,8 @@ export class EditComponent {
       this.info.title = 'NO TITLE'
     if (this.tag) {
       this.info.tags = this.tag.split(/,\s*/).filter(t => t != '')
+    } else {
+      delete this.info.tags
     }
 
     const param: any = {
