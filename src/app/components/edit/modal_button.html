@@ -12,6 +12,8 @@
            [(ngModel)]="valueForEdit"
            (keyup)="$event.keyCode==13&&editModal.close()">
   </modal-body>
-  <modal-footer [show-default-buttons]="true">
+  <modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal" (click)="editModal.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="editModal.close()">Ok</button>
   </modal-footer>
 </modal>

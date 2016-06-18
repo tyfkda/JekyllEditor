@@ -9,6 +9,8 @@
     <input type="text" autofocus
            class="form-control datepicker">
   </modal-body>
-  <modal-footer [show-default-buttons]="true">
+  <modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal" (click)="dateModal.dismiss()">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="dateModal.close()">Ok</button>
   </modal-footer>
 </modal>
