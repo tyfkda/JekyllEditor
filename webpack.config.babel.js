@@ -7,7 +7,7 @@ var webpackConfig = {
   entry: {
     'polyfills': './src/polyfills.ts',
     'vendor':    './src/vendor.ts',
-    'app':       './src/app.ts',
+    'main':      './src/main.browser.ts',
   },
 
   output: {
@@ -15,7 +15,7 @@ var webpackConfig = {
   },
 
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin({ name: ['app', 'vendor', 'polyfills'], minChunks: Infinity }),
+    new webpack.optimize.CommonsChunkPlugin({ name: ['main', 'vendor', 'polyfills'], minChunks: Infinity }),
   ],
 
   module: {
