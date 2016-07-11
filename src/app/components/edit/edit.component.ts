@@ -191,8 +191,7 @@ export class EditComponent {
     const textarea = $('#article-editor-textarea')
     const ta: any = textarea[0]
     if (ta && typeof ta.selectionStart != 'undefined' &&
-        typeof ta.selectionEnd != 'undefined' &&
-        ta.selectionStart < ta.selectionEnd) {
+        typeof ta.selectionEnd != 'undefined') {
       const val = textarea.val()
       const start = ta.selectionStart, end = ta.selectionEnd
       let mainname = post.file
@@ -200,7 +199,9 @@ export class EditComponent {
       if (ext >= 0)
         mainname = mainname.substring(0, ext)
 
-      const text = val.substring(start, end)
+      const text = (ta.selectionStart < ta.selectionEnd
+                    ? val.substring(start, end)
+                    : post.title)
       const newText = `[${text}]({% post_url ${mainname} %})`
       const e = document.createEvent('TextEvent')
       e.initTextEvent('textInput', true, true, null, newText, 9, 'en-US')
