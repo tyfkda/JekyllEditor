@@ -1,4 +1,5 @@
 import {Component, Output, ViewChild, EventEmitter} from '@angular/core'
+import {Control} from '@angular/common'
 import {HTTP_PROVIDERS, Http, Request, Response} from '@angular/http'
 
 import {Const} from '../../const'
@@ -17,16 +18,28 @@ export class ChoosePostModal {
   @Output() onCancel = new EventEmitter()
 
   posts: any
+  filteredPosts: any
+  filter = new Control()
 
   constructor(private http: Http) {
+    this.filter.valueChanges
+      .debounceTime(250)
+      .subscribe(filter => {
+        const re = new RegExp(filter, 'i')
+        this.filteredPosts = this.posts.filter((post) => {
+          return (post.title.match(re) ||
+                  (post.tags && post.tags.some(tag => tag.match(re))))
+        })
+      })
   }
 
   open() {
     this.http.get(`${Const.API}?action=list`)
       .subscribe((response: Response) => {
         const json = response.json()
-        this.posts = json.posts
+        this.posts = this.filteredPosts = json.posts
         this.posts.forEach(post => post.date = Util.parseDate(post.date))
+        this.filter.updateValue('')
         this.modal.open()
       }/*, response => {
         this._$uibModal.dismiss(response)
