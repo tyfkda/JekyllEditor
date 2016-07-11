@@ -3,8 +3,11 @@
   <button class="btn btn-primary" (click)="refresh()">Refresh</button>
   <new-post-button></new-post-button>
 </div>
-<div *ngIf="posts==null">
+<div *ngIf="posts==null&&loading">
   Loading...
+</div>
+<div *ngIf="posts==null&&!loading">
+  Error: {{error}}
 </div>
 <div *ngIf="posts&&posts.length==0">
   No posts

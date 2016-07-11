@@ -13,7 +13,9 @@ import {NewPostButton} from './new_post_button'
   pipes: []
 })
 export class Top {
+  private loading: boolean
   private posts: any
+  private error: string
 
   constructor(private http: Http) {
   }
@@ -23,6 +25,7 @@ export class Top {
   }
 
   refresh() {
+    this.loading = true
     this.http.get(`${Const.API}?action=list`)
       .subscribe((response: Response) => {
         const json = response.json()
@@ -33,6 +36,12 @@ export class Top {
             post.title = '(NO TITLE)'
           }
         })
+        this.loading = false
+      }, (error) => {
+        console.error('Handle error')
+        console.error(error)
+        this.loading = false
+        this.error = error.toString()
       })
   }
 }
