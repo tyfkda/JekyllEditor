@@ -12,17 +12,6 @@ require "#{File.dirname(__FILE__)}/,config"
 POSTS_PATH = "#{CONFIG[:jekyll_base_path]}/_posts"
 DRAFTS_PATH = "#{CONFIG[:jekyll_base_path]}/_drafts"
 
-# Patch for Sinatra, which refer the Rack::Utils.bytesize, but not exist on Rack2.0.1...
-module Rack
-  module Utils
-    def bytesize(s)
-      return s.bytesize if s
-      return 0
-    end
-    module_function :bytesize
-  end
-end
-
 def glob(path, pattern)
   if pattern.is_a?(String)
     pattern = pattern.split("\0")
