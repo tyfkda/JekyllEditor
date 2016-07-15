@@ -19,6 +19,19 @@ $ npm install
 $ bundle install
 ```
 
+### Install gem packges manually
+
+You cannot use `bundle install` && `bundle exec`,
+you must install required modules using `gem install`,
+because this app is intended to work for Apache CGI.
+So it must work on system's Ruby.
+
+Please refer `Gemfile.lock`, and install those modules manually.
+
+```sh
+$ gem install foobar -v x.y.z
+```
+
 
 ## Usage
 
