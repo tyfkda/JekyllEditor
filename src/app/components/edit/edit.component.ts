@@ -1,6 +1,7 @@
 import {Component, Input, ViewChild} from '@angular/core'
 import {HTTP_PROVIDERS, Http, Request, Response} from '@angular/http'
 import {ROUTER_DIRECTIVES, Router} from '@angular/router'
+import {DomSanitizationService, SafeHtml} from '@angular/platform-browser'
 import * as _ from 'lodash'
 
 import {ArticleEditor} from './article-editor'
@@ -45,12 +46,12 @@ export class EditComponent {
   time: string
   contents: string
   tag: string
-  preview: string
+  preview: SafeHtml
 
   timeForEdit: string
   edit: any
 
-  constructor(private http: Http, private router: Router) {
+  constructor(private http: Http, private router: Router, private sanitizer: DomSanitizationService) {
     this.info = {}
     this.time = '00:00'
     this.edit = {
@@ -113,7 +114,7 @@ export class EditComponent {
   }
 
   setPreviewHtml(previewHtml) {
-    this.preview = previewHtml
+    this.preview = this.sanitizer.bypassSecurityTrustHtml(previewHtml)
     setTimeout(() => {
       MathJax.Hub.Queue(['Typeset', MathJax.Hub])
       $('previewer a').attr({target: '_blank'})
