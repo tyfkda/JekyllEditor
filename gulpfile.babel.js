@@ -18,13 +18,13 @@ import plumber from 'gulp-plumber'
 import del from 'del'
 import shell from 'shelljs'
 
-const destDir = './public'
-const assetsDir = `${destDir}/assets`
-const srcEs6Dir = './src'
-const srcEs6Files = `${srcEs6Dir}/**/*.ts`
-const destJsDevDir = `${destDir}/jsdev`
-const srcSassFiles = './src/**/*.scss'
-const srcTestFiles = './test/**/*.spec.ts'
+const ROOT_DIR = `${__dirname}/.`
+const DEST_DIR = `${ROOT_DIR}/public`
+const ASSETS_DIR = `${DEST_DIR}/assets`
+const SRC_TS_DIR = `${ROOT_DIR}/src`
+const SRC_TS_FILES = `${SRC_TS_DIR}/**/*.ts`
+const SRC_SASS_FILES = `${ROOT_DIR}/src/**/*.scss`
+const SRC_TEST_FILES = `${ROOT_DIR}/test/**/*.spec.ts`
 
 function lint(glob) {
   return gulp.src(glob)
@@ -55,23 +55,23 @@ gulp.task('watch', kWatchDeps)
 gulp.task('build', ['sass'])
 
 gulp.task('lint', () => {
-  return lint([srcEs6Files,
-               srcTestFiles,
+  return lint([SRC_TS_FILES,
+               SRC_TEST_FILES,
                '!src/assets/**/*.js',
                '!src/config*.js'])
 })
 
 gulp.task('watch-lint', [], () => {
   return buildWhenModified(['gulpfile.babel.js',
-                            srcEs6Files,
-                            srcTestFiles,
+                            SRC_TS_FILES,
+                            SRC_TEST_FILES,
                             '!src/assets/**/*.js',
                             '!src/config*.js'],
                            lint)
 })
 
 gulp.task('sass', () => {
-  return gulp.src(srcSassFiles)
+  return gulp.src(SRC_SASS_FILES)
     .pipe(plumber())
     .pipe(sass())
     .pipe(cssnano())
@@ -80,7 +80,7 @@ gulp.task('sass', () => {
 })
 
 gulp.task('watch-sass', [], () => {
-  gulp.watch(srcSassFiles, ['sass'])
+  gulp.watch(SRC_SASS_FILES, ['sass'])
 })
 
 const devServer = (_port) => {
@@ -102,7 +102,7 @@ const testFiles = [
   'assets/lib/bind-polyfill.js',
   'assets/lib/angular.min.js',
   'assets/lib/angular-route.min.js',
-  srcTestFiles,
+  SRC_TEST_FILES,
 ]
 gulp.task('test', () => {
   return gulp.src(testFiles)
@@ -120,9 +120,8 @@ gulp.task('watch-test', () => {
 })
 
 gulp.task('clean', del.bind(null, [
-  `${destDir}/index.html`,
-  `${assetsDir}`,
-  `${destJsDevDir}`,
+  `${DEST_DIR}/index.html`,
+  `${ASSETS_DIR}`,
 ]))
 
 const SRC_DIR = './src'
