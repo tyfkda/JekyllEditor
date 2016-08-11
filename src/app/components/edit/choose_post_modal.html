@@ -3,7 +3,7 @@
     <h3 class="modal-title">Choose post to link</h3>
   </modal-header>
   <modal-body>
-    Filter: <!--input type="text" [ngFormControl]="filter" autofocus / -->
+    Filter: <input type="text" [(ngModel)]="filter" (ngModelChange)="onFilterChanged(filter)" autofocus />
 
     <ul>
       <li *ngFor="let post of filteredPosts">

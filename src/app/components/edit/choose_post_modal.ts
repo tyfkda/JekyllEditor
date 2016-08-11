@@ -1,5 +1,4 @@
 import {Component, Output, ViewChild, EventEmitter} from '@angular/core'
-import {Control} from '@angular/common'
 import {HTTP_PROVIDERS, Http, Response} from '@angular/http'
 
 import {Const} from '../../const'
@@ -19,18 +18,22 @@ export class ChoosePostModal {
 
   private posts: any
   private filteredPosts: any
-  private filter = new Control()
+  private filter: string
 
   constructor(private http: Http) {
-    this.filter.valueChanges
-      .debounceTime(250)
-      .subscribe(filter => {
-        const re = new RegExp(filter, 'i')
-        this.filteredPosts = this.posts.filter((post) => {
-          return (post.title.match(re) ||
-                  (post.tags && post.tags.some(tag => tag.match(re))))
-        })
-      })
+  }
+
+  protected onFilterChanged(filter) {
+    if (filter === '') {
+      this.filteredPosts = this.posts
+      return
+    }
+
+    const re = new RegExp(filter, 'i')
+    this.filteredPosts = this.posts.filter((post) => {
+      return (post.title.match(re) ||
+              (post.tags && post.tags.some(tag => tag.match(re))))
+    })
   }
 
   protected open() {
@@ -39,7 +42,7 @@ export class ChoosePostModal {
         const json = response.json()
         this.posts = this.filteredPosts = json.posts
         this.posts.forEach(post => post.date = Util.parseDate(post.date))
-        this.filter.updateValue('')
+        this.filter = ''
         this.modal.open()
       }/*, response => {
         this._$uibModal.dismiss(response)
