@@ -4,17 +4,15 @@
   "description": "Web interface to edit jekyll posts",
   "main": "index.js",
   "scripts": {
-    "start-old": "gulp",
-    "build-old": "gulp build",
+    "start": "npm run dev-server",
+    "build": "webpack --inline --colors --progress --display-error-details --display-cached",
     "watch": "gulp watch",
-    "server-old": "gulp server",
+    "server": "npm run build && npm run develop",
+    "develop": "webpack-dev-server --inline --colors --progress --display-error-details --display-cached --port 3000  --content-base src",
     "test": "gulp test",
     "release": "npm run build && gulp release",
     "clean": "gulp clean",
-    "server": "webpack-dev-server --inline --colors --progress --display-error-details --display-cached --port 3000  --content-base src",
-    "start": "gulp sass && (gulp dev-server & npm run server)",
-    "dev-server": "gulp dev-server",
-    "build": "webpack --inline --colors --progress --display-error-details --display-cached"
+    "dev-server": "gulp dev-server"
   },
   "author": "tyfkda",
   "repository": {

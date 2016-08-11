@@ -6,10 +6,10 @@ Web frontend for Jekyll, running on Apache/CGI.
 
 ## Requirement for development
 
-* node.js
-* npm
-* Ruby
-* Rubygems
+  * node.js
+  * npm
+  * Ruby
+  * Rubygems
 
 
 ## Set up
@@ -37,8 +37,16 @@ $ gem install foobar -v x.y.z
 
 ### Build (automatically)
 
+Start server:
+
 ```
 $ npm start
+```
+
+Start building files:
+
+```
+$ npm run develop
 ```
 
 * You can see the page in http://localhost:3000/
