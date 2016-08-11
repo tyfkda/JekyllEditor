@@ -1,10 +1,9 @@
 import {LocationStrategy, HashLocationStrategy} from '@angular/common'
 import {bootstrap} from '@angular/platform-browser-dynamic'
-import {provide, enableProdMode} from '@angular/core'
+import {enableProdMode} from '@angular/core'
 import {HTTP_PROVIDERS} from '@angular/http'
 
-import {APP_ROUTER_PROVIDERS} from './app/app.routes';
-import {Const} from './app/const'
+import {APP_ROUTER_PROVIDERS} from './app/app.routes'
 import {App} from './app/app'
 
 if (!Config.isDebug) {

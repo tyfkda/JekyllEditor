@@ -5,11 +5,8 @@ import {ROUTER_DIRECTIVES} from '@angular/router'
   selector: 'new-post-button',
   template: '<a class="btn btn-success" [routerLink]="[\'/new_post\']">New post</a>',
   directives: [ROUTER_DIRECTIVES],
-  pipes: []
+  pipes: [],
 })
 export class NewPostButton {
-  private posts: any
-
-  constructor() {
-  }
+  protected posts: any
 }

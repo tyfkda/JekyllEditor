@@ -9,7 +9,6 @@
 
 import {Component, Input, Output, EventEmitter, ViewChild} from '@angular/core'
 
-import {Const} from '../../const'
 import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
 
 @Component({
@@ -18,19 +17,19 @@ import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
   directives: [MODAL_DIRECTIVES],
 })
 export class ModalButton {
-  @Input() title: string
-  @Input() width: string
-  @Input() placeHolder: string
-  @Input() value: string
-  @Output() valueChange = new EventEmitter()
-  @ViewChild(ModalComponent) modal: ModalComponent
-  valueForEdit: string
+  @Input() protected title: string
+  @Input() protected width: string
+  @Input() protected placeHolder: string
+  @Input() protected value: string
+  @Output() protected valueChange = new EventEmitter()
+  @ViewChild(ModalComponent) protected modal: ModalComponent
+  private valueForEdit: string
 
-  ngOnInit() {
+  protected ngOnInit() {
     this.width = this.width || '100px'
   }
 
-  ngAfterViewInit() {
+  protected ngAfterViewInit() {
     this.modal.onClose
       .subscribe(() => {
         this.valueChange.emit(this.valueForEdit)

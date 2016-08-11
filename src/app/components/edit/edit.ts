@@ -13,7 +13,7 @@ export class Edit {
   constructor(private route: ActivatedRoute) {
   }
 
-  ngOnInit() {
+  protected ngOnInit() {
     this.route.params.subscribe(params => {
       this.file = params['post']
     })

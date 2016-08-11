@@ -1,5 +1,5 @@
-import {Component, Input, ViewChild} from '@angular/core'
-import {HTTP_PROVIDERS, Http, Request, Response} from '@angular/http'
+import {Component, Input} from '@angular/core'
+import {HTTP_PROVIDERS, Http, Response} from '@angular/http'
 import {ROUTER_DIRECTIVES, Router} from '@angular/router'
 import {DomSanitizationService, SafeHtml} from '@angular/platform-browser'
 import * as _ from 'lodash'
@@ -37,21 +37,23 @@ function getTimeString(date) {
   providers: [HTTP_PROVIDERS],
 })
 export class EditComponent {
-  @Input() originalFileName: string
+  @Input() protected originalFileName: string
 
-  info: any
-  fileName: string
-  mainName: string
-  date: string
-  time: string
-  contents: string
-  tag: string
-  preview: SafeHtml
+  protected info: any
+  protected fileName: string
+  protected mainName: string
+  protected date: string
+  protected time: string
+  protected contents: string
+  protected tag: string
+  protected preview: SafeHtml
 
-  timeForEdit: string
-  edit: any
+  protected timeForEdit: string
+  protected edit: any
 
-  constructor(private http: Http, private router: Router, private sanitizer: DomSanitizationService) {
+  constructor(private http: Http, private router: Router,
+              private sanitizer: DomSanitizationService)
+  {
     this.info = {}
     this.time = '00:00'
     this.edit = {
@@ -59,7 +61,7 @@ export class EditComponent {
     }
   }
 
-  ngOnInit() {
+  protected ngOnInit() {
     if (this.originalFileName) {
       this.fileName = this.originalFileName
       const m = this.fileName.match(/^(\d+-\d+-\d+)-(.*)\.(md|markdown)/)
@@ -86,42 +88,12 @@ export class EditComponent {
       $('#time-input').focus().select()
     })
 
-    $('.datepicker').datepicker(<JQueryUI.DatepickerOptions>{
+    $('.datepicker').datepicker({
       format: Const.DATE_FORMAT,
-    })
+    } as JQueryUI.DatepickerOptions)
   }
 
-  requestContents() {
-    this.http.get(`${Const.API}?action=post&file=${this.originalFileName}`)
-      .subscribe((response: Response) => {
-        const json = response.json()
-        this.info = json.info
-        this.edit.contents = json.contents
-        this.setPreviewHtml(json.html)
-        // Get date from front_matters
-        const date = Util.parseDate(this.info.date)
-        this.date = getDateString(date)
-        this.time = getTimeString(date)
-        if ('tags' in this.info && this.info.tags) {
-          this.tag = this.info.tags.join(', ')
-        }
-      }, (response: Response) => {
-        console.error(response)
-        if (response.status == 404) {  // Not Found
-          this.router.navigate(['/'])
-        }
-      })
-  }
-
-  setPreviewHtml(previewHtml) {
-    this.preview = this.sanitizer.bypassSecurityTrustHtml(previewHtml)
-    setTimeout(() => {
-      MathJax.Hub.Queue(['Typeset', MathJax.Hub])
-      $('previewer a').attr({target: '_blank'})
-    }, 0)
-  }
-
-  save() {
+  protected save() {
     let extension = 'md'
     this.info.date = `${this.date} ${this.time}`
     if (this.originalFileName == null) {  // New file.
@@ -136,7 +108,7 @@ export class EditComponent {
     if (!this.info.title)
       this.info.title = 'NO TITLE'
     if (this.tag) {
-      this.info.tags = this.tag.split(/,\s*/).filter(t => t != '')
+      this.info.tags = this.tag.split(/,\s*/).filter(t => t !== '')
     } else {
       delete this.info.tags
     }
@@ -147,7 +119,7 @@ export class EditComponent {
     }
     const newFileName = `${this.date}-${this.mainName}.${extension}`
 
-    if (newFileName != param.file) {
+    if (newFileName !== param.file) {
       param.file = newFileName
       if (this.originalFileName)
         param.originalFileName = this.originalFileName
@@ -167,7 +139,7 @@ export class EditComponent {
       })
   }
 
-  delete() {
+  protected delete() {
     const result = confirm('Delete this post?')
     if (!result)
       return
@@ -180,19 +152,19 @@ export class EditComponent {
       })
   }
 
-  isTextSelected(post) {
+  protected isTextSelected(post) {
     const textarea = $('#article-editor-textarea')
     const ta: any = textarea[0]
-    return (ta && typeof ta.selectionStart != 'undefined' &&
-            typeof ta.selectionEnd != 'undefined' &&
+    return (ta && typeof ta.selectionStart !== 'undefined' &&
+            typeof ta.selectionEnd !== 'undefined' &&
             ta.selectionStart < ta.selectionEnd)
   }
 
-  onPostChoosed(post) {
+  protected onPostChoosed(post) {
     const textarea = $('#article-editor-textarea')
     const ta: any = textarea[0]
-    if (ta && typeof ta.selectionStart != 'undefined' &&
-        typeof ta.selectionEnd != 'undefined') {
+    if (ta && typeof ta.selectionStart !== 'undefined' &&
+        typeof ta.selectionEnd !== 'undefined') {
       const val = textarea.val()
       const start = ta.selectionStart, end = ta.selectionEnd
       let mainname = post.file
@@ -214,8 +186,38 @@ export class EditComponent {
     }
   }
 
-  onPostCanceled() {
+  protected onPostCanceled() {
     const textarea = $('#article-editor-textarea')
     textarea.focus()
+  }
+
+  private requestContents() {
+    this.http.get(`${Const.API}?action=post&file=${this.originalFileName}`)
+      .subscribe((response: Response) => {
+        const json = response.json()
+        this.info = json.info
+        this.edit.contents = json.contents
+        this.setPreviewHtml(json.html)
+        // Get date from front_matters
+        const date = Util.parseDate(this.info.date)
+        this.date = getDateString(date)
+        this.time = getTimeString(date)
+        if ('tags' in this.info && this.info.tags) {
+          this.tag = this.info.tags.join(', ')
+        }
+      }, (response: Response) => {
+        console.error(response)
+        if (response.status === 404) {  // Not Found
+          this.router.navigate(['/'])
+        }
+      })
+  }
+
+  private setPreviewHtml(previewHtml) {
+    this.preview = this.sanitizer.bypassSecurityTrustHtml(previewHtml)
+    setTimeout(() => {
+      MathJax.Hub.Queue(['Typeset', MathJax.Hub])
+      $('previewer a').attr({target: '_blank'})
+    }, 0)
   }
 }

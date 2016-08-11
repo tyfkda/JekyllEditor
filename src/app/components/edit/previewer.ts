@@ -6,5 +6,5 @@ import {Component, Input} from '@angular/core'
   directives: [],
 })
 export class Previewer {
-  @Input() html: string
+  @Input() protected html: string
 }

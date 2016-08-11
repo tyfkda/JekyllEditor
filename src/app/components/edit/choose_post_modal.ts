@@ -1,6 +1,6 @@
 import {Component, Output, ViewChild, EventEmitter} from '@angular/core'
 import {Control} from '@angular/common'
-import {HTTP_PROVIDERS, Http, Request, Response} from '@angular/http'
+import {HTTP_PROVIDERS, Http, Response} from '@angular/http'
 
 import {Const} from '../../const'
 import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
@@ -13,13 +13,13 @@ import {Util} from '../../util/util'
   providers: [HTTP_PROVIDERS],
 })
 export class ChoosePostModal {
-  @ViewChild(ModalComponent) modal: ModalComponent
-  @Output() onSelect = new EventEmitter()
-  @Output() onCancel = new EventEmitter()
+  @ViewChild(ModalComponent) protected modal: ModalComponent
+  @Output() protected onSelect = new EventEmitter()
+  @Output() protected onCancel = new EventEmitter()
 
-  posts: any
-  filteredPosts: any
-  filter = new Control()
+  private posts: any
+  private filteredPosts: any
+  private filter = new Control()
 
   constructor(private http: Http) {
     this.filter.valueChanges
@@ -33,7 +33,7 @@ export class ChoosePostModal {
       })
   }
 
-  open() {
+  protected open() {
     this.http.get(`${Const.API}?action=list`)
       .subscribe((response: Response) => {
         const json = response.json()
@@ -46,12 +46,12 @@ export class ChoosePostModal {
       }*/)
   }
 
-  onPostClicked(post) {
+  protected onPostClicked(post) {
     this.modal.close()
     this.onSelect.emit(post)
   }
 
-  onPostCanceled() {
+  protected onPostCanceled() {
     this.modal.dismiss()
     this.onCancel.emit(null)
   }

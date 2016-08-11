@@ -7,8 +7,5 @@ import {EditComponent} from '../edit/edit.component'
   directives: [EditComponent],
 })
 export class NewPost {
-  private posts: any
-
-  constructor() {
-  }
+  protected posts: any
 }

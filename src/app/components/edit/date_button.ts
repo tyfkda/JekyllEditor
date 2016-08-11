@@ -6,7 +6,6 @@
 
 import {Component, Input, Output, EventEmitter, ViewChild} from '@angular/core'
 
-import {Const} from '../../const'
 import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
 
 @Component({
@@ -15,11 +14,11 @@ import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
   directives: [MODAL_DIRECTIVES],
 })
 export class DateButton {
-  @Input() date: string
-  @Output() dateChange = new EventEmitter()
-  @ViewChild(ModalComponent) modal: ModalComponent
+  @Input() private date: string
+  @Output() private dateChange = new EventEmitter()
+  @ViewChild(ModalComponent) private modal: ModalComponent
 
-  ngAfterViewInit() {
+  protected ngAfterViewInit() {
     this.modal.onClose
       .subscribe(() => {
         this.date = $('.datepicker').val()
@@ -27,7 +26,7 @@ export class DateButton {
       })
   }
 
-  startEditDate() {
+  protected startEditDate() {
     $('.datepicker').datepicker('update', this.date)
   }
 }

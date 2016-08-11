@@ -5,11 +5,11 @@ import {Component, Input, Output, EventEmitter} from '@angular/core'
   template: require('./article-editor.html'),
 })
 export class ArticleEditor {
-  @Input() params: any
-  @Output() onSaveRequested = new EventEmitter()
+  @Input() protected params: any
+  @Output() protected onSaveRequested = new EventEmitter()
 
-  onKeyUp(event) {
-    if (event.keyCode == 83 && event.ctrlKey)  // Ctrl+S
+  protected onKeyUp(event) {
+    if (event.keyCode === 83 && event.ctrlKey)  // Ctrl+S
       this.onSaveRequested.emit(null)
   }
 }
