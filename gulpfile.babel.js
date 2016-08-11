@@ -5,7 +5,7 @@ import rename from 'gulp-rename'
 const browserSync = require('browser-sync').create()
 
 // ES6
-import eslint from 'gulp-eslint'
+import tslint from 'gulp-tslint'
 
 // SASS
 import sass from 'gulp-sass'
@@ -21,17 +21,21 @@ import shell from 'shelljs'
 const destDir = './public'
 const assetsDir = `${destDir}/assets`
 const srcEs6Dir = './src'
-const srcEs6Files = `${srcEs6Dir}/**/*.js`
+const srcEs6Files = `${srcEs6Dir}/**/*.ts`
 const destJsDevDir = `${destDir}/jsdev`
 const srcSassFiles = './src/**/*.scss'
-const srcTestFiles = './test/**/*.spec.js'
+const srcTestFiles = './test/**/*.spec.ts'
 
-const lint = (glob) => {
+function lint(glob) {
   return gulp.src(glob)
-    .pipe(plumber())
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failOnError())
+    .pipe(tslint({
+      configuration: 'tslint.json',
+      formatter: 'prose',
+    }))
+    .pipe(tslint.report({
+      emitError: false,
+      summarizeFailureOutput: true
+    }))
 }
 
 const buildWhenModified = (glob, buildFunc) => {
@@ -51,18 +55,18 @@ gulp.task('watch', kWatchDeps)
 gulp.task('build', ['sass'])
 
 gulp.task('lint', () => {
-  return lint(['gulpfile.babel.js',
-               srcEs6Files,
+  return lint([srcEs6Files,
                srcTestFiles,
-               'tools/**/*.js',
                '!src/assets/**/*.js',
                '!src/config*.js'])
 })
 
 gulp.task('watch-lint', [], () => {
-  return buildWhenModified([srcEs6Files,
+  return buildWhenModified(['gulpfile.babel.js',
+                            srcEs6Files,
                             srcTestFiles,
-                            'gulpfile.babel.js'],
+                            '!src/assets/**/*.js',
+                            '!src/config*.js'],
                            lint)
 })
 
