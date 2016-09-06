@@ -12,7 +12,7 @@ import sass from 'gulp-sass'
 import cssnano from 'gulp-cssnano'
 
 // Unit test
-import karma from 'gulp-karma'
+const karmaServer = require('karma').Server
 
 import plumber from 'gulp-plumber'
 import del from 'del'
@@ -97,26 +97,17 @@ gulp.task('dev-server', () => {
 })
 
 // Unit test.
-const testFiles = [
-  'assets/lib/lodash.min.js',
-  'assets/lib/bind-polyfill.js',
-  'assets/lib/angular.min.js',
-  'assets/lib/angular-route.min.js',
-  SRC_TEST_FILES,
-]
-gulp.task('test', () => {
-  return gulp.src(testFiles)
-    .pipe(karma({
-      configFile: 'karma.conf.js',
-    }))
-    .on('error', err => console.log('Error : ' + err.message))
+gulp.task('test', (done) => {
+  new karmaServer({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true,
+  }, done).start()
+  //.on('error', err => console.log('Error : ' + err.message))
 })
 gulp.task('watch-test', () => {
-  return gulp.src(testFiles)
-    .pipe(karma({
-      configFile: 'karma.conf.js',
-      action: 'watch',
-    }))
+  new karmaServer({
+    configFile: __dirname + '/karma.conf.js',
+  }).start()
 })
 
 gulp.task('clean', del.bind(null, [
