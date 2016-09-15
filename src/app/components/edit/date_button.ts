@@ -6,12 +6,11 @@
 
 import {Component, Input, Output, EventEmitter, ViewChild} from '@angular/core'
 
-import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
+import {ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
 
 @Component({
   selector: 'date-button',
   template: require('./date_button.html'),
-  directives: [MODAL_DIRECTIVES],
 })
 export class DateButton {
   @Input() private date: string
