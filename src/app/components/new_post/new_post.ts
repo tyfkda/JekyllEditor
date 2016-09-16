@@ -1,11 +1,8 @@
 import {Component} from '@angular/core'
 
-import {EditComponent} from '../edit/edit.component'
-
 @Component({
   template: '<edit-component></edit-component>',
-  directives: [EditComponent],
 })
 export class NewPost {
-  protected posts: any
+  //protected posts: any
 }

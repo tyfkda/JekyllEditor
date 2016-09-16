@@ -1,6 +1,5 @@
 import {Component} from '@angular/core'
-import {HTTP_PROVIDERS, Http, Response} from '@angular/http'
-import {ROUTER_DIRECTIVES} from '@angular/router'
+import {Http, Response} from '@angular/http'
 
 import {Const} from '../../const'
 import {Util} from '../../util/util'
@@ -8,9 +7,6 @@ import {NewPostButton} from './new_post_button'
 
 @Component({
   template: require('./top.html'),
-  providers: [HTTP_PROVIDERS],
-  directives: [ROUTER_DIRECTIVES, NewPostButton],
-  pipes: [],
 })
 export class Top {
   private loading: boolean

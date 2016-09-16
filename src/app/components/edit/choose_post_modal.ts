@@ -1,15 +1,13 @@
 import {Component, Output, ViewChild, EventEmitter} from '@angular/core'
-import {HTTP_PROVIDERS, Http, Response} from '@angular/http'
+import {Http, Response} from '@angular/http'
 
 import {Const} from '../../const'
-import {MODAL_DIRECTIVES, ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
+import {ModalComponent} from 'ng2-bs3-modal/ng2-bs3-modal'
 import {Util} from '../../util/util'
 
 @Component({
   selector: 'choose-post-modal',
   template: require('./choose_post_modal.html'),
-  directives: [MODAL_DIRECTIVES],
-  providers: [HTTP_PROVIDERS],
 })
 export class ChoosePostModal {
   @ViewChild(ModalComponent) protected modal: ModalComponent

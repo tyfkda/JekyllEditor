@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core'
-import {HTTP_PROVIDERS, Http, Response} from '@angular/http'
-import {ROUTER_DIRECTIVES, Router} from '@angular/router'
-import {DomSanitizationService, SafeHtml} from '@angular/platform-browser'
+import {Http, Response} from '@angular/http'
+import {Router} from '@angular/router'
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser'
 import * as _ from 'lodash'
 
 import {ArticleEditor} from './article-editor'
@@ -32,9 +32,6 @@ function getTimeString(date) {
 @Component({
   selector: 'edit-component',
   template: require('./edit.component.html'),
-  directives: [ROUTER_DIRECTIVES, ArticleEditor, Previewer, ChoosePostModal,
-               ModalButton, DateButton],
-  providers: [HTTP_PROVIDERS],
 })
 export class EditComponent {
   @Input() protected originalFileName: string
@@ -52,7 +49,7 @@ export class EditComponent {
   protected edit: any
 
   constructor(private http: Http, private router: Router,
-              private sanitizer: DomSanitizationService)
+              private sanitizer: DomSanitizer)
   {
     this.info = {}
     this.time = '00:00'

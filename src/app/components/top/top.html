@@ -15,8 +15,7 @@
 <ul *ngIf="posts&&posts.length!=0">
   <li *ngFor="let post of posts">
     {{post.date | date:'yyyy/MM/dd'}} <a [routerLink]="['/edit', post.file]">{{post.title}}</a>
-    <tag *ngFor="let tag of post.tags">
-      <span class="label label-primary">{{tag}}</span>
-    </tag>
+    <span *ngFor="let tag of post.tags"
+          class="label label-primary">{{tag}}</span>
   </li>
 </ul>
