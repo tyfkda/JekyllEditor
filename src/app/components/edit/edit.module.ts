@@ -6,7 +6,7 @@ import {RouterModule} from '@angular/router'
 
 import {Ng2Bs3ModalModule} from 'ng2-bs3-modal/ng2-bs3-modal'
 
-import {ArticleEditor} from './article-editor'
+import {ArticleEditor} from './article_editor'
 import {ChoosePostModal} from './choose_post_modal'
 import {DateButton} from './date_button'
 import {Edit} from './edit'

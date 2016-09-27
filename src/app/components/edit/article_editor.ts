@@ -2,7 +2,7 @@ import {Component, Input, Output, EventEmitter} from '@angular/core'
 
 @Component({
   selector: 'article-editor',
-  template: require('./article-editor.html'),
+  template: require('./article_editor.html'),
 })
 export class ArticleEditor {
   @Input() protected params: any

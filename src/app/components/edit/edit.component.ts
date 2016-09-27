@@ -4,7 +4,7 @@ import {Router} from '@angular/router'
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser'
 import * as _ from 'lodash'
 
-import {ArticleEditor} from './article-editor'
+import {ArticleEditor} from './article_editor'
 import {ChoosePostModal} from './choose_post_modal.ts'
 import {Const} from '../../const'
 import {DateButton} from './date_button'
